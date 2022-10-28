@@ -20,9 +20,23 @@ public class App {
             while ((linha = br.readLine()) != null) {
 
                 String[] pessoa = linha.split(csvDivisor);
-                System.out.println("[nome= " + pessoa[pessoa.length-2] 
-                                    + " , cidade=" + pessoa[pessoa.length-1] + "]");
 
+                /* protótipo de algorítimo pra tirar as aspas */
+                StringBuilder sb1 = new StringBuilder();
+                char[] tab = pessoa[0].toCharArray();
+                for (char current : tab) {
+                    if (current != '"') sb1.append(current);
+                }
+                sb1.toString();
+
+                StringBuilder sb2 = new StringBuilder();
+                char[] tab2 = pessoa[0].toCharArray();
+                for (char current : tab2) {
+                    if (current != '"') sb2.append(current);
+                }
+                sb2.toString();
+
+                System.out.println("[nome= " + sb1 + " , cidade=" + sb2 + "]");
             }
 
         } catch (FileNotFoundException e) {
