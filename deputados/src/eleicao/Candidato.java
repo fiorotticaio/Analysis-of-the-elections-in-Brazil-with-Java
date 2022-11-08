@@ -24,17 +24,18 @@ public class Candidato {
 
     String nome;
     Partido partioCandidato;
+    int posRankingVotos;
 
     /* arquivo dos candidatos */
-    int cdCargo = 0;
-    int nrCandidato = 0;
-    String nmUrnaCandidato;
-    int nrPartidoCandidato = 0;
-    String sgPartidoCandidato;
-    int nrFederacaoPartidoCandidato = 0; // -1: candidato em partido isolado    
-    Date dtNascimento; 
-    int cdSitTotTurno = 0; // 2 ou 3 representa candidato eleito
-    int cdGenero = 0; // 2 para masculino, 4 para feminino
+    int cdCargo = 0;                        // Código do cargo (6 - dep estadual, 7 - dep federal)
+    int nrCandidato = 0;                    // Número do candidato
+    String nmUrnaCandidato;                 // Nome do candidato na urna
+    int nrPartidoCandidato = 0;             // Número do partido
+    String sgPartidoCandidato;              // Sigla do partido do candidato
+    int nrFederacaoPartidoCandidato = 0;    // -1: candidato em partido isolado    
+    Date dtNascimento;                      // Data de nascimento do candidato
+    int cdSitTotTurno = 0;                  // Situação do candidato (2 ou 3 - eleito)
+    int cdGenero = 0;                       // Genero do candidato (2 - masculino, 4 - feminino)
     
     /* arquivo da votação */
     int nrVotavel = 0; 
@@ -42,7 +43,14 @@ public class Candidato {
     // 95, 96, 97, 98 representam casos de votos em branco, nulos ou anulados, e devem ser ignorados
     int qtVotos = 0; // no candidato ou no partido
 
-    
+    public int getPosRankingVotos() {
+        return posRankingVotos;
+    }
+
+    public void setPosRankingVotos(int posRankingVotos) {
+        this.posRankingVotos = posRankingVotos;
+    }
+
     public void setPartioCandidato(Partido partioCandidato) {
         this.partioCandidato = partioCandidato;
     }
