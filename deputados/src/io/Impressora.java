@@ -1,11 +1,50 @@
 package io;
 
+import java.util.Collections;
 import java.util.List;
 
 import eleicao.Candidato;
 import eleicao.Partido;
 
 public class Impressora {
+
+    public void ordenaCandidatos(List<Candidato> candidatos, int flag){
+        // Colocando os candidatos em ordem
+        Collections.sort(candidatos, (c1, c2) -> {
+            if (c1.getQtVotos() == c2.getQtVotos()) {
+                //caso tenham o mesmo numero de votos, o mais velho ganha
+                return c2.getDtNascimento().compareTo(c1.getDtNascimento());
+            } else {
+                return c2.getQtVotos() - c1.getQtVotos();
+            }
+        });
+
+        // Inserindo rankings na lista de candidatos
+        int i=1;
+        for (Candidato c : candidatos){
+            if (c.getCdCargo() != flag) continue;
+            c.setPosRankingVotos(i);
+            i++;
+        }
+    }
+
+    public void imprimeCandidato(Candidato c, int i){
+        // O argumento "i" faz referencia a qual indice será colocado antes do nome do candidato.
+        //   -> Para i=-1 será colocado a posição do candidato no ranking de votos
+        //   -> Para qualquer outro valor será usado o i como indice
+        String ehFederacao="";
+        if (c.getNrFederacaoPartidoCandidato() != -1) ehFederacao = "*";
+
+        //TODO: adicionar filtro para o separador de milhar ser sempre o ponto
+        System.out.printf(
+            "%d - %s%s (%s, %,d votos)\n", 
+            i==-1?c.getPosRankingVotos():i,
+            ehFederacao,
+            c.getNmUrnaCandidato(),
+            c.getSgPartidoCandidato(),
+            c.getQtVotos()
+        );
+    }
 
     /* Debug */
     public void imprimeCandidatos(List<Candidato> candidatos) {
@@ -41,19 +80,9 @@ public class Impressora {
         
         for (Candidato c : candidatos) {
             
-            if (c.getCdCargo() != flag || i==31 || (c.getCdSitTotTurno() != 2 && c.getCdSitTotTurno() != 3) ) continue;
+            if (c.getCdCargo() != flag || i>30 || (c.getCdSitTotTurno() != 2 && c.getCdSitTotTurno() != 3) ) continue;
 
-            String ehFederacao="";
-            if (c.getNrFederacaoPartidoCandidato() != -1) ehFederacao = "*";
-
-            System.out.printf(
-                "%d - %s%s (%s, %,d votos)\n", 
-                i,
-                ehFederacao,
-                c.getNmUrnaCandidato(),
-                c.getSgPartidoCandidato(),
-                c.getQtVotos()
-            );
+            this.imprimeCandidato(c, i);
 
             i++;
         }
@@ -65,30 +94,43 @@ public class Impressora {
         int i=1;
         for (Candidato c : candidatos) {
             
-            if (c.getCdCargo() != flag || i==31) continue;
+            if (c.getCdCargo() != flag || i>30) continue;
 
-            String ehFederacao="";
-            if (c.getNrFederacaoPartidoCandidato() != -1) ehFederacao = "*";
-
-            System.out.printf(
-                "%d - %s%s (%s, %,d votos)\n", 
-                i,
-                ehFederacao,
-                c.getNmUrnaCandidato(),
-                c.getSgPartidoCandidato(),
-                c.getQtVotos()
-            );
+            this.imprimeCandidato(c, -1);
 
             i++;
         }
     }
 
-    public void imprimeRelatorio4() {
-        System.out.printf("Relatório 4\n");
+    public void imprimeRelatorio4(List<Candidato> candidatos, int flag) {
+        System.out.printf("Teriam sido eleitos se a votação fosse majoritária, e não foram eleitos:");
+        System.out.printf("\n(com sua posição no ranking de mais votados)\n");
+        
+        for (Candidato c : candidatos) {
+            
+            if (c.getCdCargo() != flag || c.getCdSitTotTurno() == 2 || c.getCdSitTotTurno() == 3) continue;
+
+            if (c.getPosRankingVotos() > 30) break;
+
+            this.imprimeCandidato(c, -1);
+        }
+
     }
 
-    public void imprimeRelatorio5() {
-        System.out.printf("Relatório 5\n");
+    public void imprimeRelatorio5(List<Candidato> candidatos, int flag) {
+        System.out.printf("Eleitos, que se beneficiaram do sistema proporcional:\n");
+        System.out.printf("(com sua posição no ranking de mais votados)\n");
+
+        for (Candidato c : candidatos) {
+            
+            if (
+                c.getCdCargo() == flag &&
+                (c.getCdSitTotTurno()==2 || c.getCdSitTotTurno()==3) &&
+                c.getPosRankingVotos()>30
+            ) this.imprimeCandidato(c, -1);
+            
+            else continue;
+        }      
     }
 
     public void imprimeRelatorio6() {

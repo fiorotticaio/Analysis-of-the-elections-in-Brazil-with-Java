@@ -35,24 +35,20 @@ public class App {
         leitor.leArquivoVotacao(caminhoArquivoVotacao, candidatos);
 
 
-        // Colocando os candidatos em ordem
-        Collections.sort(candidatos, (c1, c2) -> {
-            if (c1.getQtVotos() == c2.getQtVotos()) {
-                //caso tenham o mesmo numero de votos, o mais velho ganha
-                return c2.getDtNascimento().compareTo(c1.getDtNascimento());
-            } else {
-                return c2.getQtVotos() - c1.getQtVotos();
-            }
-        });
-
-
         /*======== Processando os dados =========*/
         Impressora impressora = new Impressora(); 
+
+        // TODO: 
+        //  perguntar para o prof se as funções de fora do App.java devem printar
+        //  ou se devem retornar valores para serem printados aqui
+        
+        /* Ordenação dos candidatos de acordo com número de votos */
+        impressora.ordenaCandidatos(candidatos, flag);
 
         /* Debug */
         // impressora.imprimeCandidatos(candidatos);
         // System.out.println();
-        impressora.imprimePartidos(partidos);
+        // impressora.imprimePartidos(partidos);
         System.out.println();
 
         /* Relatório 1 */
@@ -65,6 +61,14 @@ public class App {
 
         /* Relatório 3 */
         impressora.imprimeRelatorio3(candidatos, flag);
+        System.out.printf("\n");
+
+        /* Relatório 4 */
+        impressora.imprimeRelatorio4(candidatos, flag);
+        System.out.printf("\n");
+
+        /* Relatório 5 */
+        impressora.imprimeRelatorio5(candidatos, flag);
         System.out.printf("\n");
     }
 }
