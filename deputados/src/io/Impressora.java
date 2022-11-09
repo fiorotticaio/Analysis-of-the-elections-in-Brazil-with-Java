@@ -1,12 +1,27 @@
 package io;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import eleicao.Candidato;
 import eleicao.Partido;
 
 public class Impressora {
+
+    public void ordenaPartidos(List<Partido> partidos, int flag) {
+       // Colocando os partidos em ordem decrescente de votos
+        Collections.sort(partidos, (p1, p2) -> {
+            if (p1.getQtdVotosTotal() == p2.getQtdVotosTotal()) {
+                // caso tenham o mesmo numero de votos, o com menor número partidário ganha
+                return p1.getNumero() - p2.getNumero();
+            } else {
+                return p2.getQtdVotosTotal() - p1.getQtdVotosTotal();
+            }
+        });     
+    }
 
     public void ordenaCandidatos(List<Candidato> candidatos, int flag){
         // Colocando os candidatos em ordem
@@ -20,7 +35,7 @@ public class Impressora {
         });
 
         // Inserindo rankings na lista de candidatos
-        int i=1;
+        int i = 1;
         for (Candidato c : candidatos){
             if (c.getCdCargo() != flag) continue;
             c.setPosRankingVotos(i);
@@ -35,22 +50,24 @@ public class Impressora {
         String ehFederacao="";
         if (c.getNrFederacaoPartidoCandidato() != -1) ehFederacao = "*";
 
-        //TODO: adicionar filtro para o separador de milhar ser sempre o ponto
+        Locale localeBR = new Locale("pt","BR");
+        NumberFormat nf = NumberFormat.getNumberInstance(localeBR);
+
         System.out.printf(
-            "%d - %s%s (%s, %,d votos)\n", 
+            "%d - %s%s (%s, ", 
             i==-1?c.getPosRankingVotos():i,
             ehFederacao,
             c.getNmUrnaCandidato(),
-            c.getSgPartidoCandidato(),
-            c.getQtVotos()
+            c.getSgPartidoCandidato()
         );
+        System.out.println(nf.format(c.getQtVotos()) + " votos)");
     }
 
     /* Debug */
     public void imprimeCandidatos(List<Candidato> candidatos) {
         int i = 1;
         for (Candidato cand : candidatos) {
-            System.out.println(i + " - " + cand.getNmUrnaCandidato() + " - " + cand.getCdSitTotTurno());
+            this.imprimeCandidato(cand, i);
             i++;
         }
     }
@@ -133,16 +150,56 @@ public class Impressora {
         }      
     }
 
-    public void imprimeRelatorio6() {
-        System.out.printf("Relatório 6\n");
+    public void imprimeRelatorio6(List<Partido> partidos, int flag) {
+        System.out.printf("Votação dos partidos e número de candidatos eleitos:\n");
+        int i = 1;
+
+        Locale localeBR = new Locale("pt","BR");
+        NumberFormat nf = NumberFormat.getNumberInstance(localeBR);
+
+        for (Partido p : partidos) {
+            System.out.printf("%d - %s - %d, ", 
+                i,
+                p.getSigla(),
+                p.getNumero()
+            );
+            System.out.print(nf.format(p.getQtdVotosTotal()) + " votos ");
+            System.out.print("(" + nf.format(p.getQtdVotosNominais()) + " nominais e ");
+            System.out.print(nf.format(p.getQtdVotosLegenda()) + " de legenda), "); 
+            System.out.printf("%d candidatos eleitos\n", p.getQtdCandidatosEleitos());
+            i++;
+        }
     }
 
-    public void imprimeRelatorio7() {
-        System.out.printf("Relatório 7\n");
+    public void imprimeRelatorio7(List<Partido> partidos, int flag) {
+        System.out.printf("Sem especificação para o relatório 7\n");
     }
 
-    public void imprimeRelatorio8() {
-        System.out.printf("Relatório 8\n");
+    // TODO: ordenar
+    public void imprimeRelatorio8(List<Partido> partidos, int flag) {
+        System.out.printf("Primeiro e último colocados de cada partido:\n");
+        int i = 1;
+
+        Locale localeBR = new Locale("pt","BR");
+        NumberFormat nf = NumberFormat.getNumberInstance(localeBR);
+
+        for (Partido p : partidos) {
+            System.out.printf("%d - %s - %d, ", 
+                i,
+                p.getSigla(),
+                p.getNumero()
+            );
+
+            Candidato candidatoMaisVotado = p.getCandidatoMaisVotado(flag);
+            System.out.print(candidatoMaisVotado.getNome() + " (" + candidatoMaisVotado.getNrCandidato());
+            System.out.print(", " + nf.format(candidatoMaisVotado.getQtVotos()) + " votos) / ");
+
+            Candidato candidatoMenosVotado = p.getCandidatoMenosVotado(flag);
+            System.out.print(candidatoMenosVotado.getNome() + " (" + candidatoMenosVotado.getNrCandidato());
+            System.out.println(", " + nf.format(candidatoMenosVotado.getQtVotos()) + " votos)");
+
+            i++;
+        }
     }
 
     public void imprimeRelatorio9() {

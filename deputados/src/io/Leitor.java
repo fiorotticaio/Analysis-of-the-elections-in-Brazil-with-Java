@@ -55,6 +55,7 @@ public class Leitor {
                 DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                 Date dtNascimento = formatter.parse(infoCandidato[42]);
 
+
                 Candidato novoCandidato = new Candidato(
                     infoCandidato[17], 
                     infoCandidato[18],
@@ -62,8 +63,10 @@ public class Leitor {
                     infoCandidato[28],
                     Integer.parseInt(infoCandidato[13]),
                     Integer.parseInt(infoCandidato[30]),
-                    dtNascimento
+                    dtNascimento,
+                    Integer.parseInt(infoCandidato[16])
                 );
+
 
                 if (!partidoJaExiste(partidos, infoCandidato[28])) {
                     Partido novoPartido = new Partido(
@@ -72,7 +75,7 @@ public class Leitor {
                         infoCandidato[29]
                     );
                     partidos.add(novoPartido);
-                }
+                } 
 
                 candidatos.add(novoCandidato);
 
@@ -84,13 +87,6 @@ public class Leitor {
         }
     }
 
-
-    public boolean partidoJaExiste(List<Partido> partidos, String sigla) {
-        for (Partido partido : partidos) {
-            if (partido.getSigla().equals(sigla)) return true;
-        }
-        return false;
-    }
 
 
     public void leArquivoVotacao(String caminhoArquivo, List<Candidato> candidatos) throws Exception {
@@ -151,4 +147,35 @@ public class Leitor {
             System.out.println("Problemas com a cópia: " + ex);
         }
     }
+
+
+
+    /*========== Funções auxiliares =========*/
+
+    public boolean partidoJaExiste(List<Partido> partidos, String sigla) {
+        for (Partido partido : partidos) {
+            if (partido.getSigla().equals(sigla)) return true;
+        }
+        return false;
+    }
+    
+    public Partido getPartido(List<Partido> partidos, String sigla) {
+        for (Partido partido : partidos) {
+            if (partido.getSigla().equals(sigla)) return partido;
+        }
+        return null;
+    }
+
+    public void adicionaCandidatosPartidos(List<Candidato> candidatos, List<Partido> partidos) {
+        for (Candidato candidato : candidatos) {
+            for (Partido partido : partidos) {
+                if (candidato.getSgPartidoCandidato().equals(partido.getSigla())) {
+                    partido.adicionaCandidato(candidato);
+                }
+            }
+        }
+    }
 }
+
+
+
