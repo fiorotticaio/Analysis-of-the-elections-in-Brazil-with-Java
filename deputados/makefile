@@ -1,4 +1,4 @@
-all: compile run
+all: clear compile run
 
 compile:
 	@ javac -d bin src/*.java src/**/*.java
@@ -12,3 +12,6 @@ diff: compile
 
 run:
 	@ java -cp bin App
+
+clear:
+	clear
