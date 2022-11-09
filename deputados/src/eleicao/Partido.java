@@ -69,11 +69,11 @@ public class Partido {
             if ((candidato.getCdSitTotTurno() == 2 | candidato.getCdSitTotTurno() == 3) && candidato.getCdCargo() == flag) {
                 this.qtdCandidatosEleitos++;
                 
-                if (candidato.getNrFederacaoPartidoCandidato() == -1) {
-                    this.qtdVotosLegenda += candidato.getQtVotos();
-                } else {
-                    this.qtdVotosNominais += candidato.getQtVotos();
-                }
+            }
+
+            /* ignora os votos de legenda, que já foram preenchidos na hora da leitura */
+            if (candidato.getNrVotavel() != this.numero) {
+                this.qtdVotosNominais += candidato.getQtVotos();
             }
 
         }

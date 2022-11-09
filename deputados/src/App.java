@@ -1,4 +1,3 @@
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,25 +31,17 @@ public class App {
         /*======= Leitura dos dados ===========*/
         Leitor leitor = new Leitor();
         leitor.leArquivoCandidatos(caminhoArquivoCandidatos, candidatos, partidos);
-        leitor.leArquivoVotacao(caminhoArquivoVotacao, candidatos);
-        
+        leitor.leArquivoVotacao(caminhoArquivoVotacao, candidatos, partidos);        
         leitor.adicionaCandidatosPartidos(candidatos, partidos);
 
-
+        
+        
         /*======== Processando os dados =========*/
-
-
         for (Partido p : partidos) {
             p.calculaQuantidadeDeVotos(flag);
         }
-
         
         Impressora impressora = new Impressora(); 
-        
-
-        // TODO: 
-        //  perguntar para o prof se as funções de fora do App.java devem printar
-        //  ou se devem retornar valores para serem printados aqui
         
         impressora.ordenaCandidatos(candidatos, flag);
         impressora.ordenaPartidos(partidos, flag);
@@ -59,7 +50,7 @@ public class App {
         // impressora.imprimeCandidatos(candidatos);
         // System.out.println();
         // impressora.imprimePartidos(partidos);
-        System.out.println();
+        // System.out.println();
 
         /* Relatório 1 */
         impressora.imprimeRelatorio1(candidatos, flag);
@@ -82,17 +73,12 @@ public class App {
         System.out.printf("\n");
 
         /* Relatório 6 */
-        // FIXME: mano, tem alguma coisa nessa buceta q ta errado, ou o pdf ta errado
+        // FIXME: tem alguma coisa nessa buceta q ta errado
         impressora.imprimeRelatorio6(partidos, flag);
         System.out.printf("\n");
 
-        /* Relatório 7 */
-        // TODO: não tem exemplo de relatório 7 no pdf
-        impressora.imprimeRelatorio7(partidos, flag);
-        System.out.printf("\n");
-
         /* Relatório 8 */
-        impressora.imprimeRelatorio8(partidos, flag);
-        System.out.printf("\n");
+        // impressora.imprimeRelatorio8(partidos, flag);
+        // System.out.printf("\n");
     }
 }

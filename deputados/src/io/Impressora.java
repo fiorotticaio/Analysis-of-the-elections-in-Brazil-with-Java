@@ -75,7 +75,7 @@ public class Impressora {
     /* Debug */
     public void imprimePartidos(List<Partido> partidos) {
         for (Partido partido : partidos) {
-            System.out.println(partido.getNumero() + " - " + partido.getNome() + " - " + partido.getSigla() + " - " + partido.getQtdVotosTotal());
+            System.out.println(partido.getNumero() + " - " + partido.getSigla() + " - " + partido.getQtdVotosTotal());
         }
     }
 
@@ -171,9 +171,6 @@ public class Impressora {
         }
     }
 
-    public void imprimeRelatorio7(List<Partido> partidos, int flag) {
-        System.out.printf("Sem especificação para o relatório 7\n");
-    }
 
     // TODO: ordenar
     public void imprimeRelatorio8(List<Partido> partidos, int flag) {
@@ -191,11 +188,11 @@ public class Impressora {
             );
 
             Candidato candidatoMaisVotado = p.getCandidatoMaisVotado(flag);
-            System.out.print(candidatoMaisVotado.getNome() + " (" + candidatoMaisVotado.getNrCandidato());
+            System.out.print(candidatoMaisVotado.getNmUrnaCandidato() + " (" + candidatoMaisVotado.getNrCandidato());
             System.out.print(", " + nf.format(candidatoMaisVotado.getQtVotos()) + " votos) / ");
 
             Candidato candidatoMenosVotado = p.getCandidatoMenosVotado(flag);
-            System.out.print(candidatoMenosVotado.getNome() + " (" + candidatoMenosVotado.getNrCandidato());
+            System.out.print(candidatoMenosVotado.getNmUrnaCandidato() + " (" + candidatoMenosVotado.getNrCandidato());
             System.out.println(", " + nf.format(candidatoMenosVotado.getQtVotos()) + " votos)");
 
             i++;
