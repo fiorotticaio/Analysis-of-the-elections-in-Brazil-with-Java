@@ -22,7 +22,7 @@ public class App {
         String caminhoArquivoVotacao = "src/in/votacao_secao_2022_ES.csv";
 
         // Vamos controlar essa flag com a entrada futuramente
-        // ela serve pra distinguir --estadual (6) e --federal (7)
+        // ela serve pra distinguir --estadual (7) e --federal (6)
         int flag = 7;
         
         List<Candidato> candidatos = new LinkedList<>();
@@ -33,17 +33,27 @@ public class App {
         Leitor leitor = new Leitor();
         leitor.leArquivoCandidatos(caminhoArquivoCandidatos, candidatos, partidos);
         leitor.leArquivoVotacao(caminhoArquivoVotacao, candidatos);
+        
+        leitor.adicionaCandidatosPartidos(candidatos, partidos);
 
 
         /*======== Processando os dados =========*/
+
+
+        for (Partido p : partidos) {
+            p.calculaQuantidadeDeVotos(flag);
+        }
+
+        
         Impressora impressora = new Impressora(); 
+        
 
         // TODO: 
         //  perguntar para o prof se as funções de fora do App.java devem printar
         //  ou se devem retornar valores para serem printados aqui
         
-        /* Ordenação dos candidatos de acordo com número de votos */
         impressora.ordenaCandidatos(candidatos, flag);
+        impressora.ordenaPartidos(partidos, flag);
 
         /* Debug */
         // impressora.imprimeCandidatos(candidatos);
@@ -69,6 +79,20 @@ public class App {
 
         /* Relatório 5 */
         impressora.imprimeRelatorio5(candidatos, flag);
+        System.out.printf("\n");
+
+        /* Relatório 6 */
+        // FIXME: mano, tem alguma coisa nessa buceta q ta errado, ou o pdf ta errado
+        impressora.imprimeRelatorio6(partidos, flag);
+        System.out.printf("\n");
+
+        /* Relatório 7 */
+        // TODO: não tem exemplo de relatório 7 no pdf
+        impressora.imprimeRelatorio7(partidos, flag);
+        System.out.printf("\n");
+
+        /* Relatório 8 */
+        impressora.imprimeRelatorio8(partidos, flag);
         System.out.printf("\n");
     }
 }
