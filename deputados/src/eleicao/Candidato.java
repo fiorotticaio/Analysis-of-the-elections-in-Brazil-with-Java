@@ -5,33 +5,34 @@ import java.util.Date;
 public class Candidato {
 
     public Candidato(
-        String nome, 
-        String nmUrnaCandidato,
-        int cdSitTotTurno,
-        String sgPartidoCandidato,
         int cdCargo, 
+        int cdDetalheSituacaoCand,
+        int nrCandidato,
+        String nmUrnaCandidato,
+        int nrPartidoCandidato,
+        String sgPartidoCandidato,
         int nrFederacaoPartidoCandidato,
         Date dtNascimento,
-        int nrCandidato
+        int cdSitTotTurno
     ) {
-        this.nome = nome;
-        this.nmUrnaCandidato = nmUrnaCandidato;
-        this.cdSitTotTurno = cdSitTotTurno;
-        this.sgPartidoCandidato = sgPartidoCandidato;
         this.cdCargo = cdCargo;
+        this.cdDetalheSituacaoCand = cdDetalheSituacaoCand;
+        this.nrCandidato = nrCandidato;
+        this.nmUrnaCandidato = nmUrnaCandidato;
+        this.nrPartidoCandidato = nrPartidoCandidato;
+        this.sgPartidoCandidato = sgPartidoCandidato;
         this.nrFederacaoPartidoCandidato = nrFederacaoPartidoCandidato;
         this.dtNascimento = dtNascimento;
-        this.nrCandidato = nrCandidato;
+        this.cdSitTotTurno = cdSitTotTurno;
     }
 
-    String nome;
     Partido partioCandidato;
     int posRankingVotos;
 
     /* arquivo dos candidatos */
     int cdCargo = 0;                        // Código do cargo (7 - dep estadual, 6 - dep federal)
+    int cdDetalheSituacaoCand = 0;          // processar apenas os candidatos com 2 ou 16 (candidatura deferida)
     int nrCandidato = 0;                    // Número do candidato
-    
     String nmUrnaCandidato;                 // Nome do candidato na urna
     int nrPartidoCandidato = 0;             // Número do partido
     String sgPartidoCandidato;              // Sigla do partido do candidato
@@ -44,8 +45,16 @@ public class Candidato {
     int nrVotavel = 0; 
     // o número do candidato no caso de voto nominal ou o número do partido se for voto na legenda
     // 95, 96, 97, 98 representam casos de votos em branco, nulos ou anulados, e devem ser ignorados
-    int qtVotos = 0; 
+    int qtVotos = 0;
+    
 
+    public void setNrVotavel(int nrVotavel) {
+        this.nrVotavel = nrVotavel;
+    }
+    
+    public int getNrVotavel() {
+        return nrVotavel;
+    }
 
     public int getNrCandidato() {
         return nrCandidato;
@@ -93,10 +102,6 @@ public class Candidato {
 
     public String getNmUrnaCandidato() {
         return this.nmUrnaCandidato;
-    }
-
-    public String getNome() {
-        return nome;
     }
 
     public int getCdCargo() {

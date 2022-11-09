@@ -57,14 +57,15 @@ public class Leitor {
 
 
                 Candidato novoCandidato = new Candidato(
-                    infoCandidato[17], 
-                    infoCandidato[18],
-                    Integer.parseInt(infoCandidato[56]), 
-                    infoCandidato[28],
                     Integer.parseInt(infoCandidato[13]),
+                    Integer.parseInt(infoCandidato[24]),
+                    Integer.parseInt(infoCandidato[16]),
+                    infoCandidato[18],
+                    Integer.parseInt(infoCandidato[27]),
+                    infoCandidato[28],
                     Integer.parseInt(infoCandidato[30]),
                     dtNascimento,
-                    Integer.parseInt(infoCandidato[16])
+                    Integer.parseInt(infoCandidato[56])
                 );
 
 
@@ -89,13 +90,15 @@ public class Leitor {
 
 
 
-    public void leArquivoVotacao(String caminhoArquivo, List<Candidato> candidatos) throws Exception {
+    public void leArquivoVotacao(
+        String caminhoArquivo,
+        List<Candidato> candidatos,
+        List<Partido> partidos
+    ) throws Exception {
 
         int i = 0, j = 0;
-        int index = 0;
         String linha = "";
         String csvDivisor = ";";
-        String colunaDeInteresse = "DEPUTADO_ESTADUAL";
 
         try (
                 InputStream is = new FileInputStream(caminhoArquivo);
@@ -125,22 +128,20 @@ public class Leitor {
                     infoVotacao[j] = novaString;
                 }
 
-                /* descobrir o index da coluna "NM_CANDDIDATO" */
-                if (i == 0) {
-                    while (!infoVotacao[i].equals(colunaDeInteresse)) {
-                        i++;
-                    }
-                    index = i;
-                    // System.out.println("index: " + index);
-                    continue;
-                }
 
-
-                candidatos.forEach(candidato -> {
-                    if (candidato.getNome().equals(infoVotacao[20])) {
-                        candidato.setQtVotos(candidato.getQtVotos() + Integer.parseInt(infoVotacao[21]));
+                for (Candidato candidato : candidatos) {
+                    if (candidato.getNrCandidato() == Integer.parseInt(infoVotacao[19])) { // voto nominal
+                        candidato.setQtVotos(candidato.getQtVotos() + Integer.parseInt(infoVotacao[21]));   
+                    } else {
+                        /* esse loop deixa o programa rodando por muito tempo */
+                        // partidos.forEach(partido -> {
+                        //     if (partido.getNumero() == Integer.parseInt(infoVotacao[19])) {
+                        //         partido.setQtdVotosLegenda(partido.getQtdVotosLegenda() + Integer.parseInt(infoVotacao[21]));
+                        //     }
+                        // });
                     }
-                });
+                    candidato.setNrVotavel(Integer.parseInt(infoVotacao[19]));
+                } 
             }
 
         } catch (IOException ex) {
@@ -167,8 +168,8 @@ public class Leitor {
     }
 
     public void adicionaCandidatosPartidos(List<Candidato> candidatos, List<Partido> partidos) {
-        for (Candidato candidato : candidatos) {
-            for (Partido partido : partidos) {
+        for (Partido partido : partidos) {
+            for (Candidato candidato : candidatos) {
                 if (candidato.getSgPartidoCandidato().equals(partido.getSigla())) {
                     partido.adicionaCandidato(candidato);
                 }
