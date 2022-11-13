@@ -1,0 +1,34 @@
+@startuml
+
+class Candidato {
+    - Partido partioCandidato;
+    - int cdCargo = 0;                      
+    - int cdDetalheSituacaoCand = 0;          
+    - int nrCandidato = 0;                    
+    - String nmUrnaCandidato;                 
+    - int nrPartidoCandidato = 0;             
+    - String sgPartidoCandidato;              
+    - int nrFederacaoPartidoCandidato = 0;    
+    - Date dtNascimento;                      
+    - int cdSitTotTurno = 0;                 
+    - int cdGenero = 0;                       
+    - int nrVotavel = 0; 
+    - int qtVotos = 0;
+}
+
+class Partido {
+    - List<Candidato> candidatos;
+    - int numero = 0;
+    - String nome;
+    - String sigla;
+    - int nrFederacaoPartido = 0;
+    - int qtdVotosTotal = 0;
+    - int qtdVotosNominais = 0;
+    - int qtdVotosLegenda = 0;
+    - int qtdCandidatosEleitos = 0;
+}
+
+Candidato  --> "1" Partido : fazParteDe
+Partido  --> "0..*" Candidato : temCandidatos
+
+@enduml

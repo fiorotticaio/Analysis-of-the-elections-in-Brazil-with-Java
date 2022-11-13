@@ -74,8 +74,8 @@ public class App {
 
         /* Relatório 6 */
         // FIXME: tem alguma coisa nessa buceta q ta errado
-        impressora.imprimeRelatorio6(partidos, flag);
-        System.out.printf("\n");
+        // impressora.imprimeRelatorio6(partidos, flag);
+        // System.out.printf("\n");
 
         /* Relatório 8 */
         // impressora.imprimeRelatorio8(partidos, flag);
