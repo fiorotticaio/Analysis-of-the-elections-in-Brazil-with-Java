@@ -1,6 +1,5 @@
 package io;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +19,13 @@ public class Impressora {
     public void setNumeroDeVagas(int numeroDeVagas) {
         this.numeroDeVagas = numeroDeVagas;
     }
+
+    public void ordenaPartidosPorMaiorVotoCandidato(List<Partido> partidos, int flag) {
+        Collections.sort(partidos, (p1, p2) -> {
+            return p2.getMaiorQtdDeVotosDeUmCandidato() - p1.getMaiorQtdDeVotosDeUmCandidato();
+        });
+    }
+        
 
     public void ordenaPartidos(List<Partido> partidos, int flag) {
        // Colocando os partidos em ordem decrescente de votos
@@ -183,7 +189,6 @@ public class Impressora {
     }
 
 
-    // TODO: ordenar
     public void imprimeRelatorio8(List<Partido> partidos, int flag) {
         System.out.printf("Primeiro e último colocados de cada partido:\n");
         int i = 1;
@@ -192,6 +197,12 @@ public class Impressora {
         NumberFormat nf = NumberFormat.getNumberInstance(localeBR);
 
         for (Partido p : partidos) {
+
+            /* Partidos que não possuírem candidatos com um número positivo de votos válidos devem ser ignorados */
+            if (p.getQtdVotosNominais() == 0) continue;
+
+            this.ordenaCandidatos(p.getCandidatos(), flag);
+
             System.out.printf("%d - %s - %d, ", 
                 i,
                 p.getSigla(),

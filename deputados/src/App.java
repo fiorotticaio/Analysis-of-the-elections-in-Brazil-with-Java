@@ -83,7 +83,9 @@ public class App {
         System.out.printf("\n");
 
         /* Relatório 8 */
-        // impressora.imprimeRelatorio8(partidos, flag);
+        impressora.ordenaPartidosPorMaiorVotoCandidato(partidos, flag);
+
+        impressora.imprimeRelatorio8(partidos, flag);
         // System.out.printf("\n");
     }
 }

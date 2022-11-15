@@ -1,3 +1,6 @@
+linha 748 - um espaço a mais na frente do nome do "EVANGELISTA MARIO "
+          - coluna "NM_URNA_CANDIDATO"
+
 01 - 00 - "DT_GERACAO"
 02 - 01 - "HH_GERACAO"
 03 - 02 - "ANO_ELEICAO"
