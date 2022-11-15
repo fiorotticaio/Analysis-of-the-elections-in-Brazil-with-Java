@@ -1,5 +1,6 @@
 package eleicao;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class Candidato {
@@ -13,7 +14,8 @@ public class Candidato {
         String sgPartidoCandidato,
         int nrFederacaoPartidoCandidato,
         Date dtNascimento,
-        int cdSitTotTurno
+        int cdSitTotTurno,
+        int cdGenero
     ) {
         this.cdCargo = cdCargo;
         this.cdDetalheSituacaoCand = cdDetalheSituacaoCand;
@@ -24,6 +26,7 @@ public class Candidato {
         this.nrFederacaoPartidoCandidato = nrFederacaoPartidoCandidato;
         this.dtNascimento = dtNascimento;
         this.cdSitTotTurno = cdSitTotTurno;
+        this.cdGenero = cdGenero;
     }
 
     Partido partioCandidato;
@@ -39,7 +42,8 @@ public class Candidato {
     int nrFederacaoPartidoCandidato = 0;    // -1: candidato em partido isolado    
     Date dtNascimento;                      // Data de nascimento do candidato
     int cdSitTotTurno = 0;                  // Situação do candidato (2 ou 3 - eleito)
-    int cdGenero = 0;                       // Genero do candidato (2 - masculino, 4 - feminino)
+    int cdGenero;                           // Genero do candidato (2 - masculino, 4 - feminino)
+    
     
     /* arquivo da votação */
     int nrVotavel = 0; 
@@ -47,45 +51,48 @@ public class Candidato {
     // 95, 96, 97, 98 representam casos de votos em branco, nulos ou anulados, e devem ser ignorados
     int qtVotos = 0;
     
+    public int getCdGenero() {
+        return this.cdGenero;
+    }
+
+    public Partido getPartidoCandidato() {
+        return this.partioCandidato;
+    }
 
     public void setNrVotavel(int nrVotavel) {
         this.nrVotavel = nrVotavel;
     }
     
     public int getNrVotavel() {
-        return nrVotavel;
+        return this.nrVotavel;
     }
 
     public int getNrCandidato() {
-        return nrCandidato;
+        return this.nrCandidato;
     }
 
     public int getPosRankingVotos() {
-        return posRankingVotos;
+        return this.posRankingVotos;
     }
 
     public void setPosRankingVotos(int posRankingVotos) {
         this.posRankingVotos = posRankingVotos;
     }
 
-    public void setPartioCandidato(Partido partioCandidato) {
+    public void setPartidoCandidato(Partido partioCandidato) {
         this.partioCandidato = partioCandidato;
-    }
-
-    public Partido getPartioCandidato() {
-        return partioCandidato;
     }
     
     public int getNrFederacaoPartidoCandidato() {
-        return nrFederacaoPartidoCandidato;
+        return this.nrFederacaoPartidoCandidato;
     }
 
     public Date getDtNascimento() {
-        return dtNascimento;
+        return this.dtNascimento;
     }
     
     public String getSgPartidoCandidato() {
-        return sgPartidoCandidato;
+        return this.sgPartidoCandidato;
     }
 
     public int getCdSitTotTurno() {
@@ -93,7 +100,7 @@ public class Candidato {
     }
     
     public int getQtVotos() {
-        return qtVotos;
+        return this.qtVotos;
     }
 
     public void setQtVotos(int qtVotos) {
@@ -105,6 +112,26 @@ public class Candidato {
     }
 
     public int getCdCargo() {
-        return cdCargo;
+        return this.cdCargo;
+    }
+
+    public int calculaIdade(Date dtEleicao) {
+        Calendar calendarioDataEleicao = Calendar.getInstance();
+        calendarioDataEleicao.setTime(dtEleicao);
+        Calendar calendarioDataNascimento = Calendar.getInstance();
+        calendarioDataNascimento.setTime(this.dtNascimento);
+
+        int anos = calendarioDataEleicao.get(Calendar.YEAR) - calendarioDataNascimento.get(Calendar.YEAR);
+
+        if (calendarioDataEleicao.get(Calendar.MONTH) < calendarioDataNascimento.get(Calendar.MONTH)) {
+            anos--;
+        } else {
+            if (calendarioDataEleicao.get(Calendar.MONTH) == calendarioDataNascimento.get(Calendar.MONTH)
+                    && calendarioDataEleicao.get(Calendar.DAY_OF_MONTH) < calendarioDataNascimento.get(Calendar.DAY_OF_MONTH)) {
+                anos--;
+            }
+        }
+
+        return anos;
     }
 }

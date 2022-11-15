@@ -1,6 +1,6 @@
 package io;
 
-import java.text.DecimalFormat;
+import java.util.Date;
 import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +10,23 @@ import eleicao.Candidato;
 import eleicao.Partido;
 
 public class Impressora {
+
+    public int numeroDeVagas = 0;
+
+    public int getnumeroDeVagas() {
+        return this.numeroDeVagas;
+    }
+
+    public void setNumeroDeVagas(int numeroDeVagas) {
+        this.numeroDeVagas = numeroDeVagas;
+    }
+
+    public void ordenaPartidosPorMaiorVotoCandidato(List<Partido> partidos, int flag) {
+        Collections.sort(partidos, (p1, p2) -> {
+            return p2.getMaiorQtdDeVotosDeUmCandidato() - p1.getMaiorQtdDeVotosDeUmCandidato();
+        });
+    }
+        
 
     public void ordenaPartidos(List<Partido> partidos, int flag) {
        // Colocando os partidos em ordem decrescente de votos
@@ -87,6 +104,7 @@ public class Impressora {
                 vagas++;
             }
         }
+        this.setNumeroDeVagas(vagas);
         System.out.println("Número de vagas: " + vagas);
     }
 
@@ -97,7 +115,7 @@ public class Impressora {
         
         for (Candidato c : candidatos) {
             
-            if (c.getCdCargo() != flag || i>30 || (c.getCdSitTotTurno() != 2 && c.getCdSitTotTurno() != 3) ) continue;
+            if (c.getCdCargo() != flag || i > this.numeroDeVagas || (c.getCdSitTotTurno() != 2 && c.getCdSitTotTurno() != 3) ) continue;
 
             this.imprimeCandidato(c, i);
 
@@ -111,7 +129,7 @@ public class Impressora {
         int i=1;
         for (Candidato c : candidatos) {
             
-            if (c.getCdCargo() != flag || i>30) continue;
+            if (c.getCdCargo() != flag || i > this.numeroDeVagas) continue;
 
             this.imprimeCandidato(c, -1);
 
@@ -127,7 +145,7 @@ public class Impressora {
             
             if (c.getCdCargo() != flag || c.getCdSitTotTurno() == 2 || c.getCdSitTotTurno() == 3) continue;
 
-            if (c.getPosRankingVotos() > 30) break;
+            if (c.getPosRankingVotos() > this.numeroDeVagas) break;
 
             this.imprimeCandidato(c, -1);
         }
@@ -142,8 +160,8 @@ public class Impressora {
             
             if (
                 c.getCdCargo() == flag &&
-                (c.getCdSitTotTurno()==2 || c.getCdSitTotTurno()==3) &&
-                c.getPosRankingVotos()>30
+                (c.getCdSitTotTurno() == 2 || c.getCdSitTotTurno() == 3) &&
+                c.getPosRankingVotos() > this.numeroDeVagas
             ) this.imprimeCandidato(c, -1);
             
             else continue;
@@ -172,7 +190,6 @@ public class Impressora {
     }
 
 
-    // TODO: ordenar
     public void imprimeRelatorio8(List<Partido> partidos, int flag) {
         System.out.printf("Primeiro e último colocados de cada partido:\n");
         int i = 1;
@@ -181,6 +198,12 @@ public class Impressora {
         NumberFormat nf = NumberFormat.getNumberInstance(localeBR);
 
         for (Partido p : partidos) {
+
+            /* Partidos que não possuírem candidatos com um número positivo de votos válidos devem ser ignorados */
+            if (p.getQtdVotosNominais() == 0) continue;
+
+            this.ordenaCandidatos(p.getCandidatos(), flag);
+
             System.out.printf("%d - %s - %d, ", 
                 i,
                 p.getSigla(),
@@ -199,15 +222,77 @@ public class Impressora {
         }
     }
 
-    public void imprimeRelatorio9() {
-        System.out.printf("Relatório 9\n");
+
+    public void imprimeRelatorio9(List<Candidato> candidatos, int flag, Date dtEleicao) {
+        System.out.printf("Eleitos, por faixa etária (na data da eleição) :\n");
+
+        int qtdEleitosMenor30 = 0, qtdEleitosMaior30Menor40 = 0, qtdEleitosMaior40Menor50 = 0;
+        int qtdEleitosMaior50Menor60 = 0, qtdEleitosMaior60 = 0, qtdEleitosTotal = 0; 
+
+        for (Candidato c : candidatos) {
+            if (
+                c.getCdCargo() == flag &&
+                (c.getCdSitTotTurno() == 2 || c.getCdSitTotTurno() == 3)
+            ) {
+                if (c.calculaIdade(dtEleicao) < 30) qtdEleitosMenor30++;
+                else if (c.calculaIdade(dtEleicao) < 40) qtdEleitosMaior30Menor40++;
+                else if (c.calculaIdade(dtEleicao) < 50) qtdEleitosMaior40Menor50++;
+                else if (c.calculaIdade(dtEleicao) < 60) qtdEleitosMaior50Menor60++;
+                else qtdEleitosMaior60++;
+            }
+        }
+
+        qtdEleitosTotal = qtdEleitosMenor30 + qtdEleitosMaior30Menor40 + qtdEleitosMaior40Menor50 + qtdEleitosMaior50Menor60 + qtdEleitosMaior60;
+
+        System.out.printf("      Idade < 30: ");
+        System.out.printf("%d (%.2f%%)\n", qtdEleitosMenor30, (qtdEleitosMenor30 * 100.0) / qtdEleitosTotal);
+        System.out.printf("30 <= Idade < 40: ");
+        System.out.printf("%d (%.2f%%)\n", qtdEleitosMaior30Menor40, (qtdEleitosMaior30Menor40 * 100.0) / qtdEleitosTotal);
+        System.out.printf("40 <= Idade < 50: ");
+        System.out.printf("%d (%.2f%%)\n", qtdEleitosMaior40Menor50, (qtdEleitosMaior40Menor50 * 100.0) / qtdEleitosTotal);
+        System.out.printf("50 <= Idade < 60: ");
+        System.out.printf("%d (%.2f%%)\n", qtdEleitosMaior50Menor60, (qtdEleitosMaior50Menor60 * 100.0) / qtdEleitosTotal);
+        System.out.printf("60 <= Idade\t: ");
+        System.out.printf("%d (%.2f%%)\n", qtdEleitosMaior60, (qtdEleitosMaior60 * 100.0) / qtdEleitosTotal);
     }
 
-    public void imprimeRelatorio10() {
-        System.out.printf("Relatório 10\n");
+    public void imprimeRelatorio10(List<Candidato> candidatos, int flag) {
+        System.out.printf("Eleitos, por gênero:\n");
+
+        int qtdEleitosFeminino = 0, qtdEleitosMasculino = 0, qtdEleitosTotal = 0;
+
+        for (Candidato c : candidatos) {
+            if (
+                c.getCdCargo() == flag &&
+                (c.getCdSitTotTurno() == 2 || c.getCdSitTotTurno() == 3)
+            ) {
+                if (c.getCdGenero() == 4) qtdEleitosFeminino++;
+                else qtdEleitosMasculino++;
+            }
+        }
+
+        qtdEleitosTotal = qtdEleitosFeminino + qtdEleitosMasculino;
+
+        System.out.printf("Feminino:  %d (%.2f%%)\n", qtdEleitosFeminino, (qtdEleitosFeminino * 100.0) / qtdEleitosTotal);
+        System.out.printf("Masculino: %d (%.2f%%)\n", qtdEleitosMasculino, (qtdEleitosMasculino * 100.0) / qtdEleitosTotal);
     }
 
-    public void imprimeRelatorio11() {
-        System.out.printf("Relatório 11\n");
+    public void imprimeRelatorio11(List<Partido> partidos, int flag) {
+
+        int qtdVotosNominaisDeTodosOsPartidos = 0, qtdDeVotosDeLegendaDeTodoOsPartidos = 0;
+        int qtdVotosTotaisDeTodosOsPartidos = 0;
+
+        for (Partido p : partidos) {
+            qtdVotosNominaisDeTodosOsPartidos += p.getQtdVotosNominais();
+            qtdDeVotosDeLegendaDeTodoOsPartidos += p.getQtdVotosLegenda();
+            qtdVotosTotaisDeTodosOsPartidos += p.getQtdVotosTotal();
+        }
+
+        Locale localeBR = new Locale("pt","BR");
+        NumberFormat nf = NumberFormat.getNumberInstance(localeBR);
+
+        System.out.printf("Total de votos válidos:    %s\n", nf.format(qtdVotosTotaisDeTodosOsPartidos));
+        System.out.printf("Total de votos nominais:   %s (%.2f%%)\n", nf.format(qtdVotosNominaisDeTodosOsPartidos), (qtdVotosNominaisDeTodosOsPartidos * 100.0) / qtdVotosTotaisDeTodosOsPartidos);
+        System.out.printf("Total de votos de legenda: %s (%.2f%%)\n", nf.format(qtdDeVotosDeLegendaDeTodoOsPartidos), (qtdDeVotosDeLegendaDeTodoOsPartidos * 100.0) / qtdVotosTotaisDeTodosOsPartidos);
     }
 }

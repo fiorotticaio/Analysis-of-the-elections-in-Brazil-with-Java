@@ -1,3 +1,6 @@
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,6 +26,10 @@ public class App {
         // Vamos controlar essa flag com a entrada futuramente
         // ela serve pra distinguir --estadual (7) e --federal (6)
         int flag = 7;
+
+        String dataDaEleicao = "02/10/2022";
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date dtEleicao = formatter.parse(dataDaEleicao);
         
         List<Candidato> candidatos = new LinkedList<>();
         List<Partido> partidos = new LinkedList<>();
@@ -30,15 +37,21 @@ public class App {
 
         /*======= Leitura dos dados ===========*/
         Leitor leitor = new Leitor();
-        leitor.leArquivoCandidatos(caminhoArquivoCandidatos, candidatos, partidos);
-        leitor.leArquivoVotacao(caminhoArquivoVotacao, candidatos, partidos);        
+        leitor.leArquivoCandidatos(caminhoArquivoCandidatos, candidatos, partidos, flag);
         leitor.adicionaCandidatosPartidos(candidatos, partidos);
+        leitor.leArquivoVotacao(caminhoArquivoVotacao, candidatos, partidos, flag);        
 
         
         
         /*======== Processando os dados =========*/
+        // int count = 1;
         for (Partido p : partidos) {
+            // System.out.print(count + " - ");
             p.calculaQuantidadeDeVotos(flag);
+            // System.out.println(p.getNome());
+            // p.imprimeCandidatos();
+            // System.out.println();
+            // count++;
         }
         
         Impressora impressora = new Impressora(); 
@@ -73,12 +86,24 @@ public class App {
         System.out.printf("\n");
 
         /* Relatório 6 */
-        // FIXME: tem alguma coisa nessa buceta q ta errado
-        // impressora.imprimeRelatorio6(partidos, flag);
-        // System.out.printf("\n");
+        impressora.imprimeRelatorio6(partidos, flag);
+        System.out.printf("\n");
 
         /* Relatório 8 */
-        // impressora.imprimeRelatorio8(partidos, flag);
-        // System.out.printf("\n");
+        impressora.ordenaPartidosPorMaiorVotoCandidato(partidos, flag);
+        impressora.imprimeRelatorio8(partidos, flag);
+        System.out.printf("\n");
+
+        /* Relatório 9 */
+        impressora.imprimeRelatorio9(candidatos, flag, dtEleicao);
+        System.out.printf("\n");
+
+        /* Relatório 10 */
+        impressora.imprimeRelatorio10(candidatos, flag);
+        System.out.printf("\n");
+
+        /* Relatório 11 */
+        impressora.imprimeRelatorio11(partidos, flag);
+        System.out.printf("\n");
     }
 }

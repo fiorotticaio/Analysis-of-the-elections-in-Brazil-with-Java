@@ -21,8 +21,19 @@ public class Partido {
     int qtdVotosNominais = 0;
     int qtdVotosLegenda = 0;
     int qtdCandidatosEleitos = 0;
+    int maiorQtdDeVotosDeUmCandidato = 0;
 
+    public int getMaiorQtdDeVotosDeUmCandidato() {
+        return this.maiorQtdDeVotosDeUmCandidato;
+    }
 
+    public void setMaiorQtdDeVotosDeUmCandidato(int maiorQtdDeVotosDeUmCandidato) {
+        this.maiorQtdDeVotosDeUmCandidato = maiorQtdDeVotosDeUmCandidato;
+    }
+
+    public void setQtdVotosNominais(int qtdVotosNominais) {
+        this.qtdVotosNominais = qtdVotosNominais;
+    }
 
     public List<Candidato> getCandidatos() {
         return this.candidatos;
@@ -65,18 +76,25 @@ public class Partido {
     }
 
     public void calculaQuantidadeDeVotos(int flag) {
+
+        int maiorQtdDeVotosDeUmCandidato = -1;
+
         for (Candidato candidato : this.candidatos) {
-            if ((candidato.getCdSitTotTurno() == 2 | candidato.getCdSitTotTurno() == 3) && candidato.getCdCargo() == flag) {
+            if ((candidato.getCdSitTotTurno() == 2 | 
+                candidato.getCdSitTotTurno() == 3) && 
+                candidato.getCdCargo() == flag) 
+            {
                 this.qtdCandidatosEleitos++;
-                
             }
 
-            /* ignora os votos de legenda, que já foram preenchidos na hora da leitura */
-            if (candidato.getNrVotavel() != this.numero) {
-                this.qtdVotosNominais += candidato.getQtVotos();
+            /* já preparando pra ordenar pro relatório 8 */
+            if (candidato.getCdCargo() == flag) {
+                if (candidato.getQtVotos() > maiorQtdDeVotosDeUmCandidato) {
+                    maiorQtdDeVotosDeUmCandidato = candidato.getQtVotos();
+                }
             }
-
         }
+        this.setMaiorQtdDeVotosDeUmCandidato(maiorQtdDeVotosDeUmCandidato);
         this.qtdVotosTotal = this.qtdVotosLegenda + this.qtdVotosNominais;
     }
 
@@ -108,5 +126,11 @@ public class Partido {
             }
         }
         return menosVotado;
+    }
+
+    public void imprimeCandidatos() {
+        for (Candidato candidato : this.candidatos) {
+            System.out.println(candidato.getNrVotavel() + " - " + candidato.getNmUrnaCandidato() + " - " + candidato.getQtVotos());
+        }
     }
 }
