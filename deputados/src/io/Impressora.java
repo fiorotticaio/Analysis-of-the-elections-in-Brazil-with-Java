@@ -11,6 +11,16 @@ import eleicao.Partido;
 
 public class Impressora {
 
+    public int numeroDeVagas = 0;
+
+    public int getnumeroDeVagas() {
+        return this.numeroDeVagas;
+    }
+
+    public void setNumeroDeVagas(int numeroDeVagas) {
+        this.numeroDeVagas = numeroDeVagas;
+    }
+
     public void ordenaPartidos(List<Partido> partidos, int flag) {
        // Colocando os partidos em ordem decrescente de votos
         Collections.sort(partidos, (p1, p2) -> {
@@ -87,6 +97,7 @@ public class Impressora {
                 vagas++;
             }
         }
+        this.setNumeroDeVagas(vagas);
         System.out.println("Número de vagas: " + vagas);
     }
 
@@ -97,7 +108,7 @@ public class Impressora {
         
         for (Candidato c : candidatos) {
             
-            if (c.getCdCargo() != flag || i>30 || (c.getCdSitTotTurno() != 2 && c.getCdSitTotTurno() != 3) ) continue;
+            if (c.getCdCargo() != flag || i > this.numeroDeVagas || (c.getCdSitTotTurno() != 2 && c.getCdSitTotTurno() != 3) ) continue;
 
             this.imprimeCandidato(c, i);
 
@@ -111,7 +122,7 @@ public class Impressora {
         int i=1;
         for (Candidato c : candidatos) {
             
-            if (c.getCdCargo() != flag || i>30) continue;
+            if (c.getCdCargo() != flag || i > this.numeroDeVagas) continue;
 
             this.imprimeCandidato(c, -1);
 
@@ -127,7 +138,7 @@ public class Impressora {
             
             if (c.getCdCargo() != flag || c.getCdSitTotTurno() == 2 || c.getCdSitTotTurno() == 3) continue;
 
-            if (c.getPosRankingVotos() > 30) break;
+            if (c.getPosRankingVotos() > this.numeroDeVagas) break;
 
             this.imprimeCandidato(c, -1);
         }
@@ -142,8 +153,8 @@ public class Impressora {
             
             if (
                 c.getCdCargo() == flag &&
-                (c.getCdSitTotTurno()==2 || c.getCdSitTotTurno()==3) &&
-                c.getPosRankingVotos()>30
+                (c.getCdSitTotTurno() == 2 || c.getCdSitTotTurno() == 3) &&
+                c.getPosRankingVotos() > this.numeroDeVagas
             ) this.imprimeCandidato(c, -1);
             
             else continue;

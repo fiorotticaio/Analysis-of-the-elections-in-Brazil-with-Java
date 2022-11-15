@@ -47,45 +47,44 @@ public class Candidato {
     // 95, 96, 97, 98 representam casos de votos em branco, nulos ou anulados, e devem ser ignorados
     int qtVotos = 0;
     
+    public Partido getPartidoCandidato() {
+        return this.partioCandidato;
+    }
 
     public void setNrVotavel(int nrVotavel) {
         this.nrVotavel = nrVotavel;
     }
     
     public int getNrVotavel() {
-        return nrVotavel;
+        return this.nrVotavel;
     }
 
     public int getNrCandidato() {
-        return nrCandidato;
+        return this.nrCandidato;
     }
 
     public int getPosRankingVotos() {
-        return posRankingVotos;
+        return this.posRankingVotos;
     }
 
     public void setPosRankingVotos(int posRankingVotos) {
         this.posRankingVotos = posRankingVotos;
     }
 
-    public void setPartioCandidato(Partido partioCandidato) {
+    public void setPartidoCandidato(Partido partioCandidato) {
         this.partioCandidato = partioCandidato;
-    }
-
-    public Partido getPartioCandidato() {
-        return partioCandidato;
     }
     
     public int getNrFederacaoPartidoCandidato() {
-        return nrFederacaoPartidoCandidato;
+        return this.nrFederacaoPartidoCandidato;
     }
 
     public Date getDtNascimento() {
-        return dtNascimento;
+        return this.dtNascimento;
     }
     
     public String getSgPartidoCandidato() {
-        return sgPartidoCandidato;
+        return this.sgPartidoCandidato;
     }
 
     public int getCdSitTotTurno() {
@@ -93,7 +92,7 @@ public class Candidato {
     }
     
     public int getQtVotos() {
-        return qtVotos;
+        return this.qtVotos;
     }
 
     public void setQtVotos(int qtVotos) {
@@ -105,6 +104,6 @@ public class Candidato {
     }
 
     public int getCdCargo() {
-        return cdCargo;
+        return this.cdCargo;
     }
 }
