@@ -273,11 +273,26 @@ public class Impressora {
 
         qtdEleitosTotal = qtdEleitosFeminino + qtdEleitosMasculino;
 
-        System.out.printf("Feminino: %d (%.2f%%)\n", qtdEleitosFeminino, (qtdEleitosFeminino * 100.0) / qtdEleitosTotal);
+        System.out.printf("Feminino:  %d (%.2f%%)\n", qtdEleitosFeminino, (qtdEleitosFeminino * 100.0) / qtdEleitosTotal);
         System.out.printf("Masculino: %d (%.2f%%)\n", qtdEleitosMasculino, (qtdEleitosMasculino * 100.0) / qtdEleitosTotal);
     }
 
-    public void imprimeRelatorio11() {
-        System.out.printf("Relatório 11\n");
+    public void imprimeRelatorio11(List<Partido> partidos, int flag) {
+
+        int qtdVotosNominaisDeTodosOsPartidos = 0, qtdDeVotosDeLegendaDeTodoOsPartidos = 0;
+        int qtdVotosTotaisDeTodosOsPartidos = 0;
+
+        for (Partido p : partidos) {
+            qtdVotosNominaisDeTodosOsPartidos += p.getQtdVotosNominais();
+            qtdDeVotosDeLegendaDeTodoOsPartidos += p.getQtdVotosLegenda();
+            qtdVotosTotaisDeTodosOsPartidos += p.getQtdVotosTotal();
+        }
+
+        Locale localeBR = new Locale("pt","BR");
+        NumberFormat nf = NumberFormat.getNumberInstance(localeBR);
+
+        System.out.printf("Total de votos válidos:    %s\n", nf.format(qtdVotosTotaisDeTodosOsPartidos));
+        System.out.printf("Total de votos nominais:   %s (%.2f%%)\n", nf.format(qtdVotosNominaisDeTodosOsPartidos), (qtdVotosNominaisDeTodosOsPartidos * 100.0) / qtdVotosTotaisDeTodosOsPartidos);
+        System.out.printf("Total de votos de legenda: %s (%.2f%%)\n", nf.format(qtdDeVotosDeLegendaDeTodoOsPartidos), (qtdDeVotosDeLegendaDeTodoOsPartidos * 100.0) / qtdVotosTotaisDeTodosOsPartidos);
     }
 }

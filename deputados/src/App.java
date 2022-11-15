@@ -101,5 +101,9 @@ public class App {
         /* Relatório 10 */
         impressora.imprimeRelatorio10(candidatos, flag);
         System.out.printf("\n");
+
+        /* Relatório 11 */
+        impressora.imprimeRelatorio11(partidos, flag);
+        System.out.printf("\n");
     }
 }
