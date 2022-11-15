@@ -68,7 +68,8 @@ public class Leitor {
                     infoCandidato[28],
                     Integer.parseInt(infoCandidato[30]),
                     dtNascimento,
-                    Integer.parseInt(infoCandidato[56])
+                    Integer.parseInt(infoCandidato[56]),
+                    Integer.parseInt(infoCandidato[45])
                 );
 
 

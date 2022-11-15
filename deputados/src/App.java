@@ -1,3 +1,6 @@
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,6 +26,10 @@ public class App {
         // Vamos controlar essa flag com a entrada futuramente
         // ela serve pra distinguir --estadual (7) e --federal (6)
         int flag = 7;
+
+        String dataDaEleicao = "02/10/2022";
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date dtEleicao = formatter.parse(dataDaEleicao);
         
         List<Candidato> candidatos = new LinkedList<>();
         List<Partido> partidos = new LinkedList<>();
@@ -84,8 +91,15 @@ public class App {
 
         /* Relatório 8 */
         impressora.ordenaPartidosPorMaiorVotoCandidato(partidos, flag);
-
         impressora.imprimeRelatorio8(partidos, flag);
-        // System.out.printf("\n");
+        System.out.printf("\n");
+
+        /* Relatório 9 */
+        impressora.imprimeRelatorio9(candidatos, flag, dtEleicao);
+        System.out.printf("\n");
+
+        /* Relatório 10 */
+        impressora.imprimeRelatorio10(candidatos, flag);
+        System.out.printf("\n");
     }
 }

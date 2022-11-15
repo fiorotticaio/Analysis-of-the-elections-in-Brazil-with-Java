@@ -1,5 +1,6 @@
 package io;
 
+import java.util.Date;
 import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.List;
@@ -221,12 +222,59 @@ public class Impressora {
         }
     }
 
-    public void imprimeRelatorio9() {
-        System.out.printf("Relatório 9\n");
+
+    public void imprimeRelatorio9(List<Candidato> candidatos, int flag, Date dtEleicao) {
+        System.out.printf("Eleitos, por faixa etária (na data da eleição) :\n");
+
+        int qtdEleitosMenor30 = 0, qtdEleitosMaior30Menor40 = 0, qtdEleitosMaior40Menor50 = 0;
+        int qtdEleitosMaior50Menor60 = 0, qtdEleitosMaior60 = 0, qtdEleitosTotal = 0; 
+
+        for (Candidato c : candidatos) {
+            if (
+                c.getCdCargo() == flag &&
+                (c.getCdSitTotTurno() == 2 || c.getCdSitTotTurno() == 3)
+            ) {
+                if (c.calculaIdade(dtEleicao) < 30) qtdEleitosMenor30++;
+                else if (c.calculaIdade(dtEleicao) < 40) qtdEleitosMaior30Menor40++;
+                else if (c.calculaIdade(dtEleicao) < 50) qtdEleitosMaior40Menor50++;
+                else if (c.calculaIdade(dtEleicao) < 60) qtdEleitosMaior50Menor60++;
+                else qtdEleitosMaior60++;
+            }
+        }
+
+        qtdEleitosTotal = qtdEleitosMenor30 + qtdEleitosMaior30Menor40 + qtdEleitosMaior40Menor50 + qtdEleitosMaior50Menor60 + qtdEleitosMaior60;
+
+        System.out.printf("      Idade < 30: ");
+        System.out.printf("%d (%.2f%%)\n", qtdEleitosMenor30, (qtdEleitosMenor30 * 100.0) / qtdEleitosTotal);
+        System.out.printf("30 <= Idade < 40: ");
+        System.out.printf("%d (%.2f%%)\n", qtdEleitosMaior30Menor40, (qtdEleitosMaior30Menor40 * 100.0) / qtdEleitosTotal);
+        System.out.printf("40 <= Idade < 50: ");
+        System.out.printf("%d (%.2f%%)\n", qtdEleitosMaior40Menor50, (qtdEleitosMaior40Menor50 * 100.0) / qtdEleitosTotal);
+        System.out.printf("50 <= Idade < 60: ");
+        System.out.printf("%d (%.2f%%)\n", qtdEleitosMaior50Menor60, (qtdEleitosMaior50Menor60 * 100.0) / qtdEleitosTotal);
+        System.out.printf("60 <= Idade\t: ");
+        System.out.printf("%d (%.2f%%)\n", qtdEleitosMaior60, (qtdEleitosMaior60 * 100.0) / qtdEleitosTotal);
     }
 
-    public void imprimeRelatorio10() {
-        System.out.printf("Relatório 10\n");
+    public void imprimeRelatorio10(List<Candidato> candidatos, int flag) {
+        System.out.printf("Eleitos, por gênero:\n");
+
+        int qtdEleitosFeminino = 0, qtdEleitosMasculino = 0, qtdEleitosTotal = 0;
+
+        for (Candidato c : candidatos) {
+            if (
+                c.getCdCargo() == flag &&
+                (c.getCdSitTotTurno() == 2 || c.getCdSitTotTurno() == 3)
+            ) {
+                if (c.getCdGenero() == 4) qtdEleitosFeminino++;
+                else qtdEleitosMasculino++;
+            }
+        }
+
+        qtdEleitosTotal = qtdEleitosFeminino + qtdEleitosMasculino;
+
+        System.out.printf("Feminino: %d (%.2f%%)\n", qtdEleitosFeminino, (qtdEleitosFeminino * 100.0) / qtdEleitosTotal);
+        System.out.printf("Masculino: %d (%.2f%%)\n", qtdEleitosMasculino, (qtdEleitosMasculino * 100.0) / qtdEleitosTotal);
     }
 
     public void imprimeRelatorio11() {
