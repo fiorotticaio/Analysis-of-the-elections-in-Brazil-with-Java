@@ -30,15 +30,21 @@ public class App {
 
         /*======= Leitura dos dados ===========*/
         Leitor leitor = new Leitor();
-        leitor.leArquivoCandidatos(caminhoArquivoCandidatos, candidatos, partidos);
-        leitor.leArquivoVotacao(caminhoArquivoVotacao, candidatos, partidos);        
+        leitor.leArquivoCandidatos(caminhoArquivoCandidatos, candidatos, partidos, flag);
         leitor.adicionaCandidatosPartidos(candidatos, partidos);
+        leitor.leArquivoVotacao(caminhoArquivoVotacao, candidatos, partidos, flag);        
 
         
         
         /*======== Processando os dados =========*/
+        // int count = 1;
         for (Partido p : partidos) {
+            // System.out.print(count + " - ");
             p.calculaQuantidadeDeVotos(flag);
+            // System.out.println(p.getNome());
+            // p.imprimeCandidatos();
+            // System.out.println();
+            // count++;
         }
         
         Impressora impressora = new Impressora(); 
@@ -73,9 +79,8 @@ public class App {
         System.out.printf("\n");
 
         /* Relatório 6 */
-        // FIXME: tem alguma coisa nessa buceta q ta errado
-        // impressora.imprimeRelatorio6(partidos, flag);
-        // System.out.printf("\n");
+        impressora.imprimeRelatorio6(partidos, flag);
+        System.out.printf("\n");
 
         /* Relatório 8 */
         // impressora.imprimeRelatorio8(partidos, flag);
