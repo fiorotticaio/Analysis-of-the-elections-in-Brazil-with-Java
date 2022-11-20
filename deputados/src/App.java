@@ -11,21 +11,16 @@ import io.Leitor;
 
 public class App {
     public static void main(String[] args) throws Exception {
+        
+        
+        
+        /*======== Recebendo dados da entrada padrão =========*/
         if (args.length < 4) {
-            System.out.println("Use: java -jar deputados.jar <opção_de_cargo> <caminho_arquivo_candidatos> <caminho_arquivo_votacao> <data>");
-            System.exit(1);
+            throw new Exception("Use: java -jar deputados.jar <opção_de_cargo> <caminho_arquivo_candidatos> <caminho_arquivo_votacao> <data>");
         }
 
-        // int flag = 7;
-        // String caminhoArquivoCandidatos = "src/in/consulta_cand_2022_ES.csv";
-        // String caminhoArquivoVotacao = "src/in/votacao_secao_2022_ES.csv";
-        // String dataDaEleicao = "02/10/2022";
-        
-        // for (String s : args) {
-        //     System.out.println(s);   
-        // }
-
         int flag;
+
         if (args[0].compareTo("--estadual")==0) flag = 7;
         else if (args[0].compareTo("--federal")==0) flag = 6;
         else flag = 0;
@@ -35,10 +30,10 @@ public class App {
         String dataDaEleicao = args[3];
 
         if (flag!=6 && flag!=7) {
-            System.out.printf("Código de deputado não reconhecido (%d)\n",flag);
-            System.exit(1);
+            throw new Exception("Código de deputado não reconhecido (" + flag + ")" );
         }
 
+        /*=========== Criando variáveis importantes (listas e tipo Date) ===========*/
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date dtEleicao = formatter.parse(dataDaEleicao);
         
@@ -55,26 +50,20 @@ public class App {
         
         
         /*======== Processando os dados =========*/
-        // int count = 1;
-        for (Partido p : partidos) {
-            // System.out.print(count + " - ");
-            p.calculaQuantidadeDeVotos(flag);
-            // System.out.println(p.getNome());
-            // p.imprimeCandidatos();
-            // System.out.println();
-            // count++;
-        }
+        for (Partido p : partidos) p.calculaQuantidadeDeVotos(flag);
         
         Impressora impressora = new Impressora(); 
-        
         impressora.ordenaCandidatos(candidatos, flag);
         impressora.ordenaPartidos(partidos, flag);
-
         /* Debug */
         // impressora.imprimeCandidatos(candidatos);
         // System.out.println();
         // impressora.imprimePartidos(partidos);
         // System.out.println();
+
+
+
+        /*======== Imprimindo relatórios ========*/
 
         /* Relatório 1 */
         impressora.imprimeRelatorio1(candidatos, flag);
