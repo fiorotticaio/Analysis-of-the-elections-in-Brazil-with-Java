@@ -11,23 +11,34 @@ import io.Leitor;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        // if (args.length < 4) {
-        //     System.out.println("Use: java -jar deputados.jar <opção_de_cargo> <caminho_arquivo_candidatos> <caminho_arquivo_votacao> <data>");
-        //     System.exit(1);
-        // }
-
-        for (String str : args) {
-            System.out.println(str);
+        if (args.length < 4) {
+            System.out.println("Use: java -jar deputados.jar <opção_de_cargo> <caminho_arquivo_candidatos> <caminho_arquivo_votacao> <data>");
+            System.exit(1);
         }
 
-        String caminhoArquivoCandidatos = "src/in/consulta_cand_2022_ES.csv";
-        String caminhoArquivoVotacao = "src/in/votacao_secao_2022_ES.csv";
+        // int flag = 7;
+        // String caminhoArquivoCandidatos = "src/in/consulta_cand_2022_ES.csv";
+        // String caminhoArquivoVotacao = "src/in/votacao_secao_2022_ES.csv";
+        // String dataDaEleicao = "02/10/2022";
+        
+        // for (String s : args) {
+        //     System.out.println(s);   
+        // }
 
-        // Vamos controlar essa flag com a entrada futuramente
-        // ela serve pra distinguir --estadual (7) e --federal (6)
-        int flag = 7;
+        int flag;
+        if (args[0].compareTo("--estadual")==0) flag = 7;
+        else if (args[0].compareTo("--federal")==0) flag = 6;
+        else flag = 0;
 
-        String dataDaEleicao = "02/10/2022";
+        String caminhoArquivoCandidatos = args[1];
+        String caminhoArquivoVotacao = args[2];
+        String dataDaEleicao = args[3];
+
+        if (flag!=6 && flag!=7) {
+            System.out.printf("Código de deputado não reconhecido (%d)\n",flag);
+            System.exit(1);
+        }
+
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date dtEleicao = formatter.parse(dataDaEleicao);
         

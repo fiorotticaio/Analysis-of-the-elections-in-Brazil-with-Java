@@ -15,7 +15,8 @@ public class Candidato {
         int nrFederacaoPartidoCandidato,
         Date dtNascimento,
         int cdSitTotTurno,
-        int cdGenero
+        int cdGenero,
+        boolean apenasVotosDeLegenda
     ) {
         this.cdCargo = cdCargo;
         this.cdDetalheSituacaoCand = cdDetalheSituacaoCand;
@@ -27,21 +28,23 @@ public class Candidato {
         this.dtNascimento = dtNascimento;
         this.cdSitTotTurno = cdSitTotTurno;
         this.cdGenero = cdGenero;
+        this.apenasVotosDeLegenda = apenasVotosDeLegenda;
     }
 
     Partido partioCandidato;
     int posRankingVotos;
 
     /* arquivo dos candidatos */
-    int cdCargo = 0;                        // Código do cargo (7 - dep estadual, 6 - dep federal)
+    int nrFederacaoPartidoCandidato = 0;    // -1: candidato em partido isolado    
+    boolean apenasVotosDeLegenda;           // Caso esteja "Válido (legenda)" no campo NM_TIPO_DESTINACAO_VOTOS
     int cdDetalheSituacaoCand = 0;          // processar apenas os candidatos com 2 ou 16 (candidatura deferida)
-    int nrCandidato = 0;                    // Número do candidato
-    String nmUrnaCandidato;                 // Nome do candidato na urna
     int nrPartidoCandidato = 0;             // Número do partido
     String sgPartidoCandidato;              // Sigla do partido do candidato
-    int nrFederacaoPartidoCandidato = 0;    // -1: candidato em partido isolado    
-    Date dtNascimento;                      // Data de nascimento do candidato
+    String nmUrnaCandidato;                 // Nome do candidato na urna
     int cdSitTotTurno = 0;                  // Situação do candidato (2 ou 3 - eleito)
+    int nrCandidato = 0;                    // Número do candidato
+    Date dtNascimento;                      // Data de nascimento do candidato
+    int cdCargo = 0;                        // Código do cargo (7 - dep estadual, 6 - dep federal)
     int cdGenero;                           // Genero do candidato (2 - masculino, 4 - feminino)
     
     
@@ -50,6 +53,14 @@ public class Candidato {
     // o número do candidato no caso de voto nominal ou o número do partido se for voto na legenda
     // 95, 96, 97, 98 representam casos de votos em branco, nulos ou anulados, e devem ser ignorados
     int qtVotos = 0;
+
+    public boolean getApenasVotosDeLegenda() {
+        return apenasVotosDeLegenda;
+    }
+
+    public void setApenasVotosDeLegenda(boolean apenasVotosDeLegenda) {
+        this.apenasVotosDeLegenda = apenasVotosDeLegenda;
+    }
     
     public int getCdGenero() {
         return this.cdGenero;

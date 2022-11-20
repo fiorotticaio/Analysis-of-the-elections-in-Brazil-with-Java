@@ -110,7 +110,7 @@ public class Impressora {
 
 
     public void imprimeRelatorio2(List<Candidato> candidatos, int flag) {
-        System.out.println("Deputados estaduais eleitos:");
+        System.out.printf("Deputados %s eleitos:\n", flag==7?"estaduais":"federais");
         int i = 1;
         
         for (Candidato c : candidatos) {
@@ -176,15 +176,23 @@ public class Impressora {
         NumberFormat nf = NumberFormat.getNumberInstance(localeBR);
 
         for (Partido p : partidos) {
-            System.out.printf("%d - %s - %d, ", 
+            System.out.printf("%d - %s - %d, %s %s (%s %s e %s de legenda), %d %s\n", 
                 i,
                 p.getSigla(),
-                p.getNumero()
+                p.getNumero(),
+
+                nf.format(p.getQtdVotosTotal()),
+                p.getQtdVotosTotal()>1?"votos":"voto",  //tratamento de plural ou singular
+
+                nf.format(p.getQtdVotosNominais()),
+                p.getQtdVotosNominais()>1?"nominais":"nominal", //tratamento de plural ou singular
+
+                nf.format(p.getQtdVotosLegenda()),
+
+                p.getQtdCandidatosEleitos(),
+                p.getQtdCandidatosEleitos()>1?"candidatos eleitos":"candidato eleito"
             );
-            System.out.print(nf.format(p.getQtdVotosTotal()) + " votos ");
-            System.out.print("(" + nf.format(p.getQtdVotosNominais()) + " nominais e ");
-            System.out.print(nf.format(p.getQtdVotosLegenda()) + " de legenda), "); 
-            System.out.printf("%d candidatos eleitos\n", p.getQtdCandidatosEleitos());
+
             i++;
         }
     }
@@ -203,20 +211,24 @@ public class Impressora {
             if (p.getQtdVotosNominais() == 0) continue;
 
             this.ordenaCandidatos(p.getCandidatos(), flag);
+            Candidato candidatoMaisVotado = p.getCandidatoMaisVotado(flag);
+            Candidato candidatoMenosVotado = p.getCandidatoMenosVotado(flag);
 
-            System.out.printf("%d - %s - %d, ", 
+            System.out.printf("%d - %s - %d, %s (%d, %s %s) / %s (%d, %s %s)\n",
                 i,
                 p.getSigla(),
-                p.getNumero()
+                p.getNumero(),
+
+                candidatoMaisVotado.getNmUrnaCandidato(),
+                candidatoMaisVotado.getNrCandidato(),
+                nf.format(candidatoMaisVotado.getQtVotos()),
+                candidatoMaisVotado.getQtVotos()>1?"votos":"voto", //tratamento de plural ou singular
+
+                candidatoMenosVotado.getNmUrnaCandidato(),
+                candidatoMenosVotado.getNrCandidato(),
+                nf.format(candidatoMenosVotado.getQtVotos()),
+                candidatoMenosVotado.getQtVotos()>1?"votos":"voto" //tratamento de plural ou singular
             );
-
-            Candidato candidatoMaisVotado = p.getCandidatoMaisVotado(flag);
-            System.out.print(candidatoMaisVotado.getNmUrnaCandidato() + " (" + candidatoMaisVotado.getNrCandidato());
-            System.out.print(", " + nf.format(candidatoMaisVotado.getQtVotos()) + " votos) / ");
-
-            Candidato candidatoMenosVotado = p.getCandidatoMenosVotado(flag);
-            System.out.print(candidatoMenosVotado.getNmUrnaCandidato() + " (" + candidatoMenosVotado.getNrCandidato());
-            System.out.println(", " + nf.format(candidatoMenosVotado.getQtVotos()) + " votos)");
 
             i++;
         }
@@ -224,7 +236,7 @@ public class Impressora {
 
 
     public void imprimeRelatorio9(List<Candidato> candidatos, int flag, Date dtEleicao) {
-        System.out.printf("Eleitos, por faixa etária (na data da eleição) :\n");
+        System.out.printf("Eleitos, por faixa etária (na data da eleição):\n");
 
         int qtdEleitosMenor30 = 0, qtdEleitosMaior30Menor40 = 0, qtdEleitosMaior40Menor50 = 0;
         int qtdEleitosMaior50Menor60 = 0, qtdEleitosMaior60 = 0, qtdEleitosTotal = 0; 
@@ -244,16 +256,25 @@ public class Impressora {
 
         qtdEleitosTotal = qtdEleitosMenor30 + qtdEleitosMaior30Menor40 + qtdEleitosMaior40Menor50 + qtdEleitosMaior50Menor60 + qtdEleitosMaior60;
 
-        System.out.printf("      Idade < 30: ");
-        System.out.printf("%d (%.2f%%)\n", qtdEleitosMenor30, (qtdEleitosMenor30 * 100.0) / qtdEleitosTotal);
-        System.out.printf("30 <= Idade < 40: ");
-        System.out.printf("%d (%.2f%%)\n", qtdEleitosMaior30Menor40, (qtdEleitosMaior30Menor40 * 100.0) / qtdEleitosTotal);
-        System.out.printf("40 <= Idade < 50: ");
-        System.out.printf("%d (%.2f%%)\n", qtdEleitosMaior40Menor50, (qtdEleitosMaior40Menor50 * 100.0) / qtdEleitosTotal);
-        System.out.printf("50 <= Idade < 60: ");
-        System.out.printf("%d (%.2f%%)\n", qtdEleitosMaior50Menor60, (qtdEleitosMaior50Menor60 * 100.0) / qtdEleitosTotal);
-        System.out.printf("60 <= Idade\t: ");
-        System.out.printf("%d (%.2f%%)\n", qtdEleitosMaior60, (qtdEleitosMaior60 * 100.0) / qtdEleitosTotal);
+        System.out.printf("Idade < 30: %d (%.2f%%)\n",
+            qtdEleitosMenor30,
+            (qtdEleitosMenor30 * 100.0) / qtdEleitosTotal);
+
+        System.out.printf("30 <= Idade < 40: %d (%.2f%%)\n",
+            qtdEleitosMaior30Menor40, 
+            (qtdEleitosMaior30Menor40 * 100.0) / qtdEleitosTotal);
+
+        System.out.printf("40 <= Idade < 50: %d (%.2f%%)\n",
+            qtdEleitosMaior40Menor50,
+            (qtdEleitosMaior40Menor50 * 100.0) / qtdEleitosTotal);
+
+        System.out.printf("50 <= Idade < 60: %d (%.2f%%)\n", 
+            qtdEleitosMaior50Menor60,
+            (qtdEleitosMaior50Menor60 * 100.0) / qtdEleitosTotal);
+        
+        System.out.printf("60 <= Idade : %d (%.2f%%)\n", 
+            qtdEleitosMaior60,
+            (qtdEleitosMaior60 * 100.0) / qtdEleitosTotal);
     }
 
     public void imprimeRelatorio10(List<Candidato> candidatos, int flag) {
@@ -273,7 +294,7 @@ public class Impressora {
 
         qtdEleitosTotal = qtdEleitosFeminino + qtdEleitosMasculino;
 
-        System.out.printf("Feminino:  %d (%.2f%%)\n", qtdEleitosFeminino, (qtdEleitosFeminino * 100.0) / qtdEleitosTotal);
+        System.out.printf("Feminino: %d (%.2f%%)\n", qtdEleitosFeminino, (qtdEleitosFeminino * 100.0) / qtdEleitosTotal);
         System.out.printf("Masculino: %d (%.2f%%)\n", qtdEleitosMasculino, (qtdEleitosMasculino * 100.0) / qtdEleitosTotal);
     }
 
@@ -291,8 +312,15 @@ public class Impressora {
         Locale localeBR = new Locale("pt","BR");
         NumberFormat nf = NumberFormat.getNumberInstance(localeBR);
 
-        System.out.printf("Total de votos válidos:    %s\n", nf.format(qtdVotosTotaisDeTodosOsPartidos));
-        System.out.printf("Total de votos nominais:   %s (%.2f%%)\n", nf.format(qtdVotosNominaisDeTodosOsPartidos), (qtdVotosNominaisDeTodosOsPartidos * 100.0) / qtdVotosTotaisDeTodosOsPartidos);
-        System.out.printf("Total de votos de legenda: %s (%.2f%%)\n", nf.format(qtdDeVotosDeLegendaDeTodoOsPartidos), (qtdDeVotosDeLegendaDeTodoOsPartidos * 100.0) / qtdVotosTotaisDeTodosOsPartidos);
+        System.out.printf("Total de votos válidos: %s\n",
+             nf.format(qtdVotosTotaisDeTodosOsPartidos));
+
+        System.out.printf("Total de votos nominais: %s (%.2f%%)\n",
+            nf.format(qtdVotosNominaisDeTodosOsPartidos),
+            (qtdVotosNominaisDeTodosOsPartidos * 100.0) / qtdVotosTotaisDeTodosOsPartidos);
+
+        System.out.printf("Total de votos de legenda: %s (%.2f%%)\n",
+            nf.format(qtdDeVotosDeLegendaDeTodoOsPartidos),
+            (qtdDeVotosDeLegendaDeTodoOsPartidos * 100.0) / qtdVotosTotaisDeTodosOsPartidos);
     }
 }
