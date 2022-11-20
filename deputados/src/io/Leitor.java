@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -90,6 +91,8 @@ public class Leitor {
 
         } catch (IOException ex) {
             System.out.println("Problemas com a cópia: " + ex);
+        } catch (ParseException ex) {
+            System.out.println("Problemas ao converter o texto em objeto Date: " + ex);
         }
     }
 

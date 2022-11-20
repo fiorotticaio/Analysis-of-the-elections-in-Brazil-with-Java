@@ -1,4 +1,5 @@
 import java.util.Date;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
@@ -16,8 +17,8 @@ public class App {
         
         /*======== Recebendo dados da entrada padrão =========*/
         if (args.length < 4) {
-            throw new Exception("Use: java -jar deputados.jar <opção_de_cargo> <caminho_arquivo_candidatos> <caminho_arquivo_votacao> <data>");
-        }
+            throw new IOException("Use: java -jar deputados.jar <opção_de_cargo> <caminho_arquivo_candidatos> <caminho_arquivo_votacao> <data>");
+        } 
 
         int flag;
 
@@ -30,7 +31,7 @@ public class App {
         String dataDaEleicao = args[3];
 
         if (flag!=6 && flag!=7) {
-            throw new Exception("Código de deputado não reconhecido (" + flag + ")" );
+            throw new IOException("Código de deputado não reconhecido");
         }
 
         /*=========== Criando variáveis importantes (listas e tipo Date) ===========*/
