@@ -38,6 +38,7 @@ public class App {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date dtEleicao = formatter.parse(dataDaEleicao);
         
+        //TODO: trocar por hashmap
         List<Candidato> candidatos = new LinkedList<>();
         List<Partido> partidos = new LinkedList<>();
         

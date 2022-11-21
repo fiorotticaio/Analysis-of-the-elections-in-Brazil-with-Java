@@ -65,11 +65,16 @@ public class Leitor {
                 }
                 
                 /* checagem da candidatura definida ou se é voto de legenda direto */
-                if (!(Integer.parseInt(infoCandidato[68])==2 || Integer.parseInt(infoCandidato[68]) == 16) && (infoCandidato[67] != "Válido (legenda)")) continue;
+                boolean ehLegenda = (infoCandidato[67]).compareTo("Válido (legenda)")==0?true:false;
+                boolean ehValido = (Integer.parseInt(infoCandidato[68])==2 || Integer.parseInt(infoCandidato[68])==16);
+                boolean ehDoEscopo = Integer.parseInt(infoCandidato[13])==flag;
+                
+                if ((!ehLegenda && !ehValido) || (!ehDoEscopo)) continue;
                 
                 DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                 Date dtNascimento = formatter.parse(infoCandidato[42]);
-                
+
+
                 Candidato novoCandidato = new Candidato(
                     Integer.parseInt(infoCandidato[13]),
                     Integer.parseInt(infoCandidato[68]),
@@ -81,13 +86,14 @@ public class Leitor {
                     dtNascimento,
                     Integer.parseInt(infoCandidato[56]),
                     Integer.parseInt(infoCandidato[45]),
-                    infoCandidato[67] == "Válido (legenda)"
+                    ehLegenda
                 );
                 
                 candidatos.add(novoCandidato);
 
                 i++;
             }
+
 
         } catch (IOException ex) {
             System.out.println("Problemas com a cópia: " + ex);
@@ -114,7 +120,6 @@ public class Leitor {
                 InputStreamReader isr = new InputStreamReader(is, "ISO-8859-1");
                 BufferedReader br = new BufferedReader(isr);
             ) {
-
 
             while ((linha = br.readLine()) != null) {
 
@@ -143,30 +148,31 @@ public class Leitor {
                     Integer.parseInt(infoVotacao[19]) == 97 ||
                     Integer.parseInt(infoVotacao[19]) == 98 ||
                     Integer.parseInt(infoVotacao[17]) != flag) continue;
-
-
-                // buscando votos nominais analisando o código dos candidatos
+                
                 int existeCandidato = 0;
+                // buscando votos nominais analisando o código dos candidatos
                 for (Candidato candidato : candidatos) {
                     if (candidato.getNrCandidato() == Integer.parseInt(infoVotacao[19]) && candidato.getCdCargo() == flag) { 
                         
                         //caso o candidato tenha especificado NM_TIPO_DESTINACAO_VOTOS como "Valido (legenda)"
-                        //automaticamente ele é de legenda, então sai do loop
-                        if (candidato.getApenasVotosDeLegenda()) break;
+                        if (candidato.getApenasVotosDeLegenda()) {
+                            Partido partido = candidato.getPartidoCandidato();
+                            partido.setQtdVotosLegenda(partido.getQtdVotosLegenda() + Integer.parseInt(infoVotacao[21]));
+                            
+                            partido.getCandidatos().remove(candidato);
+                            break;
+                        }
                         
                         candidato.setNrVotavel(Integer.parseInt(infoVotacao[19]));
-
                         candidato.setQtVotos(candidato.getQtVotos() + Integer.parseInt(infoVotacao[21]));
-
-                        candidato.getPartidoCandidato().setQtdVotosNominais(
-                            candidato.getPartidoCandidato().getQtdVotosNominais() + Integer.parseInt(infoVotacao[21])
-                        );
+                        Partido partido = candidato.getPartidoCandidato();
+                        partido.setQtdVotosNominais(partido.getQtdVotosNominais() + Integer.parseInt(infoVotacao[21]));
 
                         existeCandidato = 1;
                     }
                 }
 
-                // buscando votos de legenda analisando o código dos partidos
+                // buscando o código dos partidos para contabilizar os votos de legenda
                 if (existeCandidato == 0) {
                     for (Partido partido : partidos) {
                         if (partido.getNumero() == Integer.parseInt(infoVotacao[19])) { 
@@ -202,6 +208,7 @@ public class Leitor {
     }
 
     public void adicionaCandidatosPartidos(List<Candidato> candidatos, List<Partido> partidos) {
+        //TODO: trocar por hashmap
         for (Partido partido : partidos) {
             for (Candidato candidato : candidatos) {
                 if (candidato.getSgPartidoCandidato().equals(partido.getSigla())) {

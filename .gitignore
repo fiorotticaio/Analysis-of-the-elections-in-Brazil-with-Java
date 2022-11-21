@@ -5,3 +5,4 @@ testes/
 test.sh
 *.todo
 *.csv
+carbon/
