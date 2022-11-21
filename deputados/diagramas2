@@ -1,0 +1,26 @@
+@startuml
+
+class Leitor {
+    void leArquivoCandidatos()
+    void leArquivoVotacao()
+}
+
+class Impressora {
+    void imprimeRelatorio1()
+    void imprimeRelatorio2()
+    void imprimeRelatorio3()
+    void imprimeRelatorio4()
+    void imprimeRelatorio5()
+    void imprimeRelatorio6()
+    void imprimeRelatorio8()
+    void imprimeRelatorio9()
+    void imprimeRelatorio10()
+    void imprimeRelatorio11()
+}
+
+note "Chamado pelo programa principal" as n1
+Leitor .. n1
+Impressora .. n1
+
+
+@enduml

@@ -1,4 +1,7 @@
 consulta_cand_2022
 votacao_secao_2022_ES
 bin/
+testes/
+test.sh
+*.todo
 *.csv
