@@ -1,4 +1,5 @@
 import java.util.Date;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
@@ -11,26 +12,33 @@ import io.Leitor;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        // if (args.length < 4) {
-        //     System.out.println("Use: java -jar deputados.jar <opção_de_cargo> <caminho_arquivo_candidatos> <caminho_arquivo_votacao> <data>");
-        //     System.exit(1);
-        // }
+        
+        
+        
+        /*======== Recebendo dados da entrada padrão =========*/
+        if (args.length < 4) {
+            throw new IOException("Use: java -jar deputados.jar <opção_de_cargo> <caminho_arquivo_candidatos> <caminho_arquivo_votacao> <data>");
+        } 
 
-        for (String str : args) {
-            System.out.println(str);
+        int flag;
+
+        if (args[0].compareTo("--estadual")==0) flag = 7;
+        else if (args[0].compareTo("--federal")==0) flag = 6;
+        else flag = 0;
+
+        String caminhoArquivoCandidatos = args[1];
+        String caminhoArquivoVotacao = args[2];
+        String dataDaEleicao = args[3];
+
+        if (flag!=6 && flag!=7) {
+            throw new IOException("Código de deputado não reconhecido");
         }
 
-        String caminhoArquivoCandidatos = "src/in/consulta_cand_2022_ES.csv";
-        String caminhoArquivoVotacao = "src/in/votacao_secao_2022_ES.csv";
-
-        // Vamos controlar essa flag com a entrada futuramente
-        // ela serve pra distinguir --estadual (7) e --federal (6)
-        int flag = 7;
-
-        String dataDaEleicao = "02/10/2022";
+        /*=========== Criando variáveis importantes (listas e tipo Date) ===========*/
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date dtEleicao = formatter.parse(dataDaEleicao);
         
+        //TODO: trocar por hashmap
         List<Candidato> candidatos = new LinkedList<>();
         List<Partido> partidos = new LinkedList<>();
         
@@ -44,26 +52,20 @@ public class App {
         
         
         /*======== Processando os dados =========*/
-        // int count = 1;
-        for (Partido p : partidos) {
-            // System.out.print(count + " - ");
-            p.calculaQuantidadeDeVotos(flag);
-            // System.out.println(p.getNome());
-            // p.imprimeCandidatos();
-            // System.out.println();
-            // count++;
-        }
+        for (Partido p : partidos) p.calculaQuantidadeDeVotos(flag);
         
         Impressora impressora = new Impressora(); 
-        
         impressora.ordenaCandidatos(candidatos, flag);
         impressora.ordenaPartidos(partidos, flag);
-
         /* Debug */
         // impressora.imprimeCandidatos(candidatos);
         // System.out.println();
         // impressora.imprimePartidos(partidos);
         // System.out.println();
+
+
+
+        /*======== Imprimindo relatórios ========*/
 
         /* Relatório 1 */
         impressora.imprimeRelatorio1(candidatos, flag);

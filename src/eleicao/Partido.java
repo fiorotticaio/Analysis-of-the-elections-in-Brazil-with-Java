@@ -12,14 +12,16 @@ public class Partido {
         this.nome = nome;
     }
     
-    List<Candidato> candidatos;
-    int numero = 0;
     String nome;
     String sigla;
-    int nrFederacaoPartido = 0;
+    int numero = 0;
+    
+    List<Candidato> candidatos;
+    
     int qtdVotosTotal = 0;
-    int qtdVotosNominais = 0;
     int qtdVotosLegenda = 0;
+    int qtdVotosNominais = 0;
+    int nrFederacaoPartido = 0;
     int qtdCandidatosEleitos = 0;
     int maiorQtdDeVotosDeUmCandidato = 0;
 
@@ -94,6 +96,7 @@ public class Partido {
                 }
             }
         }
+
         this.setMaiorQtdDeVotosDeUmCandidato(maiorQtdDeVotosDeUmCandidato);
         this.qtdVotosTotal = this.qtdVotosLegenda + this.qtdVotosNominais;
     }

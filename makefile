@@ -6,9 +6,9 @@ compile:
 
 diff: compile
 	@ echo "Compilando e rodando o programa..."
-	@ java -cp bin App > src/testes/outputRelatorio$(RELAT).txt
+	@ java -cp bin App > src/gabarito/outputRelatorio$(RELAT).txt
 	@ echo "Rodando diff..."
-	@ diff ./src/testes/gabaritoRelatorio$(RELAT).txt ./src/testes/outputRelatorio$(RELAT).txt
+	@ diff ./src/gabarito/gabaritoRelatorio$(RELAT).txt ./src/gabarito/outputRelatorio$(RELAT).txt
 
 run:
 	@ java -cp bin App
