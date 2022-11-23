@@ -1,9 +1,12 @@
 import java.util.Date;
+import java.util.HashMap;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import eleicao.Candidato;
 import eleicao.Partido;
@@ -39,8 +42,10 @@ public class App {
         Date dtEleicao = formatter.parse(dataDaEleicao);
         
         //TODO: trocar por hashmap
-        List<Candidato> candidatos = new LinkedList<>();
-        List<Partido> partidos = new LinkedList<>();
+        Map<Integer, Candidato> candidatos = new HashMap<>(); // <NR_CANDIDATO, CANDIDATO>
+        // List<Candidato> candidatos = new LinkedList<>();
+        Map<Integer, Partido> partidos = new HashMap<>(); // <NR_PARTIDO, PARTIDO>
+        // List<Partido> partidos = new LinkedList<>();
         
 
         /*======= Leitura dos dados ===========*/
@@ -52,11 +57,11 @@ public class App {
         
         
         /*======== Processando os dados =========*/
-        for (Partido p : partidos) p.calculaQuantidadeDeVotos(flag);
+        for (Partido p : partidos.values()) p.calculaQuantidadeDeVotos(flag);
         
         Impressora impressora = new Impressora(); 
-        impressora.ordenaCandidatos(candidatos, flag);
-        impressora.ordenaPartidos(partidos, flag);
+        List<Candidato> candidatosOrdenados = impressora.ordenaCandidatos(candidatos, flag);
+        List<Partido> partidosOrdenados = impressora.ordenaPartidos(partidos, flag);
         /* Debug */
         // impressora.imprimeCandidatos(candidatos);
         // System.out.println();
@@ -68,44 +73,44 @@ public class App {
         /*======== Imprimindo relatórios ========*/
 
         /* Relatório 1 */
-        impressora.imprimeRelatorio1(candidatos, flag);
+        impressora.imprimeRelatorio1(candidatosOrdenados, flag);
         System.out.printf("\n");
         
         /* Relatório 2 */
-        impressora.imprimeRelatorio2(candidatos, flag);
+        impressora.imprimeRelatorio2(candidatosOrdenados, flag);
         System.out.printf("\n");
 
         /* Relatório 3 */
-        impressora.imprimeRelatorio3(candidatos, flag);
+        impressora.imprimeRelatorio3(candidatosOrdenados, flag);
         System.out.printf("\n");
 
         /* Relatório 4 */
-        impressora.imprimeRelatorio4(candidatos, flag);
+        impressora.imprimeRelatorio4(candidatosOrdenados, flag);
         System.out.printf("\n");
 
         /* Relatório 5 */
-        impressora.imprimeRelatorio5(candidatos, flag);
+        impressora.imprimeRelatorio5(candidatosOrdenados, flag);
         System.out.printf("\n");
 
         /* Relatório 6 */
-        impressora.imprimeRelatorio6(partidos, flag);
+        impressora.imprimeRelatorio6(partidosOrdenados, flag);
         System.out.printf("\n");
 
         /* Relatório 8 */
-        impressora.ordenaPartidosPorMaiorVotoCandidato(partidos, flag);
-        impressora.imprimeRelatorio8(partidos, flag);
+        List<Partido> partidosOrdenadosMaiorCand = impressora.ordenaPartidosPorMaiorVotoCandidato(partidosOrdenados, flag);
+        impressora.imprimeRelatorio8(partidosOrdenadosMaiorCand, flag);
         System.out.printf("\n");
 
         /* Relatório 9 */
-        impressora.imprimeRelatorio9(candidatos, flag, dtEleicao);
+        impressora.imprimeRelatorio9(candidatosOrdenados, flag, dtEleicao);
         System.out.printf("\n");
 
         /* Relatório 10 */
-        impressora.imprimeRelatorio10(candidatos, flag);
+        impressora.imprimeRelatorio10(candidatosOrdenados, flag);
         System.out.printf("\n");
 
         /* Relatório 11 */
-        impressora.imprimeRelatorio11(partidos, flag);
+        impressora.imprimeRelatorio11(partidosOrdenadosMaiorCand, flag);
         System.out.printf("\n");
     }
 }

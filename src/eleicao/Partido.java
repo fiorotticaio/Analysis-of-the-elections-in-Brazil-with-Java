@@ -1,12 +1,14 @@
 package eleicao;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-public class Partido {
+public class Partido implements Comparable<Partido> {
     
     public Partido(int numero, String sigla, String nome) {
-        this.candidatos = new LinkedList<Candidato>();
+        this.candidatos = new HashMap<>();
         this.numero = numero;
         this.sigla = sigla;
         this.nome = nome;
@@ -16,7 +18,7 @@ public class Partido {
     String sigla;
     int numero = 0;
     
-    List<Candidato> candidatos;
+    Map<Integer, Candidato> candidatos;
     
     int qtdVotosTotal = 0;
     int qtdVotosLegenda = 0;
@@ -38,6 +40,11 @@ public class Partido {
     }
 
     public List<Candidato> getCandidatos() {
+        return new LinkedList<>(this.candidatos.values());
+        // return this.candidatos;
+    }
+
+    public Map<Integer, Candidato> getCandidatosMap() {
         return this.candidatos;
     }
 
@@ -74,14 +81,33 @@ public class Partido {
     }
 
     public void adicionaCandidato(Candidato candidato) {
-        this.candidatos.add(candidato);
+        this.candidatos.put(candidato.getNrCandidato(), candidato);
+        // this.candidatos.add(candidato);
+    }
+
+    @Override
+    public int compareTo(Partido o) {
+        if (this.qtdVotosTotal > o.qtdVotosTotal) {
+            return -1;
+        } else if (this.qtdVotosTotal < o.qtdVotosTotal) {
+            return 1;
+        } else {
+            // critério de desempate: número
+            if (this.numero < o.numero) {
+                return -1;
+            } else if (this.numero > o.numero) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
     }
 
     public void calculaQuantidadeDeVotos(int flag) {
 
         int maiorQtdDeVotosDeUmCandidato = -1;
 
-        for (Candidato candidato : this.candidatos) {
+        for (Candidato candidato : this.getCandidatos()) {
             if ((candidato.getCdSitTotTurno() == 2 | 
                 candidato.getCdSitTotTurno() == 3) && 
                 candidato.getCdCargo() == flag) 
@@ -103,7 +129,7 @@ public class Partido {
 
     public Candidato getCandidatoMaisVotado(int flag) {
         Candidato maisVotado = null;
-        for (Candidato candidato : this.candidatos) {
+        for (Candidato candidato : this.getCandidatos()) {
 
             if (candidato.getCdCargo() != flag) continue;
 
@@ -118,7 +144,7 @@ public class Partido {
 
     public Candidato getCandidatoMenosVotado(int flag) {
         Candidato menosVotado = null;
-        for (Candidato candidato : this.candidatos) {
+        for (Candidato candidato : this.getCandidatos()) {
 
             if (candidato.getCdCargo() != flag) continue;
 
@@ -132,7 +158,7 @@ public class Partido {
     }
 
     public void imprimeCandidatos() {
-        for (Candidato candidato : this.candidatos) {
+        for (Candidato candidato : this.getCandidatos()) {
             System.out.println(candidato.getNrVotavel() + " - " + candidato.getNmUrnaCandidato() + " - " + candidato.getQtVotos());
         }
     }
