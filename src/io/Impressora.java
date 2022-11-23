@@ -1,14 +1,12 @@
 package io;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TreeMap;
 
 import eleicao.Candidato;
 import eleicao.Partido;

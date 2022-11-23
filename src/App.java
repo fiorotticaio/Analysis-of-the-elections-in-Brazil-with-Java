@@ -3,10 +3,8 @@ import java.util.HashMap;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import eleicao.Candidato;
 import eleicao.Partido;
@@ -41,11 +39,8 @@ public class App {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date dtEleicao = formatter.parse(dataDaEleicao);
         
-        //TODO: trocar por hashmap
         Map<Integer, Candidato> candidatos = new HashMap<>(); // <NR_CANDIDATO, CANDIDATO>
-        // List<Candidato> candidatos = new LinkedList<>();
         Map<Integer, Partido> partidos = new HashMap<>(); // <NR_PARTIDO, PARTIDO>
-        // List<Partido> partidos = new LinkedList<>();
         
 
         /*======= Leitura dos dados ===========*/

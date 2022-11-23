@@ -174,26 +174,6 @@ public class Leitor {
                         
                     }
                 }
-                // for (Candidato candidato : candidatos) {
-                //     if (candidato.getNrCandidato() == Integer.parseInt(infoVotacao[19]) && candidato.getCdCargo() == flag) { 
-                        
-                //         //caso o candidato tenha especificado NM_TIPO_DESTINACAO_VOTOS como "Valido (legenda)"
-                //         if (candidato.getApenasVotosDeLegenda()) {
-                //             Partido partido = candidato.getPartidoCandidato();
-                //             partido.setQtdVotosLegenda(partido.getQtdVotosLegenda() + Integer.parseInt(infoVotacao[21]));
-                            
-                //             partido.getCandidatos().remove(candidato);
-                //             break;
-                //         }
-                        
-                //         candidato.setNrVotavel(Integer.parseInt(infoVotacao[19]));
-                //         candidato.setQtVotos(candidato.getQtVotos() + Integer.parseInt(infoVotacao[21]));
-                //         Partido partido = candidato.getPartidoCandidato();
-                //         partido.setQtdVotosNominais(partido.getQtdVotosNominais() + Integer.parseInt(infoVotacao[21]));
-
-                //         existeCandidato = 1;
-                //     }
-                // }
 
                 // buscando o código dos partidos para contabilizar os votos de legenda
                 if (existeCandidato == 0) {
@@ -201,13 +181,6 @@ public class Leitor {
                     if (part != null) {
                         part.setQtdVotosLegenda(part.getQtdVotosLegenda() + Integer.parseInt(infoVotacao[21]));
                     }
-                    // for (Partido partido : partidos) {
-                    //     if (partido.getNumero() == Integer.parseInt(infoVotacao[19])) { 
-                    //         partido.setQtdVotosLegenda(
-                    //             partido.getQtdVotosLegenda() + Integer.parseInt(infoVotacao[21])
-                    //         );
-                    //     }
-                    // }
                 }
             }
 
@@ -237,20 +210,11 @@ public class Leitor {
     }
 
     public void adicionaCandidatosPartidos(Map<Integer, Candidato> candidatos, Map<Integer, Partido> partidos) {
-        //TODO: trocar por hashmap
         for (Candidato candidato : candidatos.values()) {
             Partido partido = partidos.get(candidato.getNrPartidoCandidato());
             partido.adicionaCandidato(candidato);
             candidato.setPartidoCandidato(partido);
         }
-        // for (Partido partido : partidos) {
-        //     for (Candidato candidato : candidatos) {
-        //         if (candidato.getSgPartidoCandidato().equals(partido.getSigla())) {
-        //             partido.adicionaCandidato(candidato);
-        //             candidato.setPartidoCandidato(partido);
-        //         }
-        //     }
-        // }
     }
 }
 

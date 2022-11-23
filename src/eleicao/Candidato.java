@@ -3,7 +3,7 @@ package eleicao;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Candidato{
+public class Candidato {
 
     public Candidato(
         int cdCargo, 
@@ -130,24 +130,6 @@ public class Candidato{
     public int getCdCargo() {
         return this.cdCargo;
     }
-
-    // @Override
-    // public int compareTo(Candidato o) {
-    //     if (this.qtVotos > o.qtVotos) {
-    //         return -1;
-    //     } else if (this.qtVotos < o.qtVotos) {
-    //         return 1;
-    //     } else {
-    //         // critério de desempate: data de nascimento
-    //         if (this.dtNascimento.before(o.dtNascimento)) {
-    //             return -1;
-    //         } else if (this.dtNascimento.after(o.dtNascimento)) {
-    //             return 1;
-    //         } else {
-    //             return 0;
-    //         }
-    //     }
-    // }
 
     public int calculaIdade(Date dtEleicao) {
         Calendar calendarioDataEleicao = Calendar.getInstance();

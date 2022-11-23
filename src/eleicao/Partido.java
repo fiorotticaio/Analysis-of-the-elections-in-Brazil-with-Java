@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class Partido implements Comparable<Partido> {
+public class Partido {
     
     public Partido(int numero, String sigla, String nome) {
         this.candidatos = new HashMap<>();
@@ -41,7 +41,6 @@ public class Partido implements Comparable<Partido> {
 
     public List<Candidato> getCandidatos() {
         return new LinkedList<>(this.candidatos.values());
-        // return this.candidatos;
     }
 
     public Map<Integer, Candidato> getCandidatosMap() {
@@ -82,25 +81,6 @@ public class Partido implements Comparable<Partido> {
 
     public void adicionaCandidato(Candidato candidato) {
         this.candidatos.put(candidato.getNrCandidato(), candidato);
-        // this.candidatos.add(candidato);
-    }
-
-    @Override
-    public int compareTo(Partido o) {
-        if (this.qtdVotosTotal > o.qtdVotosTotal) {
-            return -1;
-        } else if (this.qtdVotosTotal < o.qtdVotosTotal) {
-            return 1;
-        } else {
-            // critério de desempate: número
-            if (this.numero < o.numero) {
-                return -1;
-            } else if (this.numero > o.numero) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
     }
 
     public void calculaQuantidadeDeVotos(int flag) {
