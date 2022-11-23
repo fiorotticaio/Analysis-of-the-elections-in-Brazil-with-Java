@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 import eleicao.Candidato;
 import eleicao.Partido;
@@ -18,8 +19,8 @@ public class Leitor {
     
     public void leArquivoCandidatos(
             String caminhoArquivo,
-            List<Candidato> candidatos,
-            List<Partido> partidos,
+            Map<Integer, Candidato> candidatos,
+            Map<Integer, Partido> partidos,
             int flag)
     throws Exception {
 
@@ -55,13 +56,14 @@ public class Leitor {
                 }
 
                 /* adiciona o partido à lista de partidos (mesmo se o voto for invalido ou nulo) */
-                if (!partidoJaExiste(partidos, infoCandidato[28])) {
+                if (!partidoJaExiste(partidos, Integer.parseInt(infoCandidato[27]))) {
                     Partido novoPartido = new Partido(
                         Integer.parseInt(infoCandidato[27]),
                         infoCandidato[28],
                         infoCandidato[29]
                     );
-                    partidos.add(novoPartido);   
+                    partidos.put(novoPartido.getNumero(), novoPartido);
+                    // partidos.add(novoPartido);
                 }
                 
                 /* checagem da candidatura definida ou se é voto de legenda direto */
@@ -89,7 +91,8 @@ public class Leitor {
                     ehLegenda
                 );
                 
-                candidatos.add(novoCandidato);
+                candidatos.put(Integer.parseInt(infoCandidato[16]), novoCandidato);
+                // candidatos.add(novoCandidato);
 
                 i++;
             }
@@ -106,8 +109,8 @@ public class Leitor {
 
     public void leArquivoVotacao(
         String caminhoArquivo,
-        List<Candidato> candidatos,
-        List<Partido> partidos,
+        Map<Integer, Candidato> candidatos,
+        Map<Integer, Partido> partidos,
         int flag
     ) throws Exception {
 
@@ -150,36 +153,33 @@ public class Leitor {
                     Integer.parseInt(infoVotacao[17]) != flag) continue;
                 
                 int existeCandidato = 0;
-                // buscando votos nominais analisando o código dos candidatos
-                for (Candidato candidato : candidatos) {
-                    if (candidato.getNrCandidato() == Integer.parseInt(infoVotacao[19]) && candidato.getCdCargo() == flag) { 
-                        
-                        //caso o candidato tenha especificado NM_TIPO_DESTINACAO_VOTOS como "Valido (legenda)"
-                        if (candidato.getApenasVotosDeLegenda()) {
-                            Partido partido = candidato.getPartidoCandidato();
-                            partido.setQtdVotosLegenda(partido.getQtdVotosLegenda() + Integer.parseInt(infoVotacao[21]));
-                            
-                            partido.getCandidatos().remove(candidato);
-                            break;
-                        }
-                        
-                        candidato.setNrVotavel(Integer.parseInt(infoVotacao[19]));
-                        candidato.setQtVotos(candidato.getQtVotos() + Integer.parseInt(infoVotacao[21]));
-                        Partido partido = candidato.getPartidoCandidato();
-                        partido.setQtdVotosNominais(partido.getQtdVotosNominais() + Integer.parseInt(infoVotacao[21]));
 
+                // buscando votos nominais analisando o código dos candidatos
+                Candidato cand = candidatos.get(Integer.parseInt(infoVotacao[19]));
+                if (cand != null && cand.getCdCargo() == flag) {
+                    if (cand.getApenasVotosDeLegenda()) {
+                        Partido partido = cand.getPartidoCandidato();
+                        partido.setQtdVotosLegenda(partido.getQtdVotosLegenda() + Integer.parseInt(infoVotacao[21]));
+                        
+                        partido.getCandidatosMap().remove(cand.getNrCandidato(), cand);
+
+                    } else {
+                        
+                        cand.setNrVotavel(Integer.parseInt(infoVotacao[19]));
+                        cand.setQtVotos(cand.getQtVotos() + Integer.parseInt(infoVotacao[21]));
+                        Partido partido = cand.getPartidoCandidato();
+                        partido.setQtdVotosNominais(partido.getQtdVotosNominais() + Integer.parseInt(infoVotacao[21]));
+    
                         existeCandidato = 1;
+                        
                     }
                 }
 
                 // buscando o código dos partidos para contabilizar os votos de legenda
                 if (existeCandidato == 0) {
-                    for (Partido partido : partidos) {
-                        if (partido.getNumero() == Integer.parseInt(infoVotacao[19])) { 
-                            partido.setQtdVotosLegenda(
-                                partido.getQtdVotosLegenda() + Integer.parseInt(infoVotacao[21])
-                            );
-                        }
+                    Partido part = partidos.get(Integer.parseInt(infoVotacao[19]));
+                    if (part != null) {
+                        part.setQtdVotosLegenda(part.getQtdVotosLegenda() + Integer.parseInt(infoVotacao[21]));
                     }
                 }
             }
@@ -193,11 +193,13 @@ public class Leitor {
 
     /*========== Funções auxiliares =========*/
 
-    public boolean partidoJaExiste(List<Partido> partidos, String sigla) {
-        for (Partido partido : partidos) {
-            if (partido.getSigla().equals(sigla)) return true;
-        }
-        return false;
+    public boolean partidoJaExiste(Map<Integer, Partido> partidos, int numeroPartido) {
+        // for (Partido partido : partidos) {
+        //     if (partido.getSigla().equals(sigla)) return true;
+        // }
+        // return false;
+        if (partidos.containsKey(numeroPartido)) return true;
+        else return false;
     }
     
     public Partido getPartido(List<Partido> partidos, String sigla) {
@@ -207,15 +209,11 @@ public class Leitor {
         return null;
     }
 
-    public void adicionaCandidatosPartidos(List<Candidato> candidatos, List<Partido> partidos) {
-        //TODO: trocar por hashmap
-        for (Partido partido : partidos) {
-            for (Candidato candidato : candidatos) {
-                if (candidato.getSgPartidoCandidato().equals(partido.getSigla())) {
-                    partido.adicionaCandidato(candidato);
-                    candidato.setPartidoCandidato(partido);
-                }
-            }
+    public void adicionaCandidatosPartidos(Map<Integer, Candidato> candidatos, Map<Integer, Partido> partidos) {
+        for (Candidato candidato : candidatos.values()) {
+            Partido partido = partidos.get(candidato.getNrPartidoCandidato());
+            partido.adicionaCandidato(candidato);
+            candidato.setPartidoCandidato(partido);
         }
     }
 }

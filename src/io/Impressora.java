@@ -1,10 +1,12 @@
 package io;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import eleicao.Candidato;
 import eleicao.Partido;
@@ -21,28 +23,39 @@ public class Impressora {
         this.numeroDeVagas = numeroDeVagas;
     }
 
-    public void ordenaPartidosPorMaiorVotoCandidato(List<Partido> partidos, int flag) {
-        Collections.sort(partidos, (p1, p2) -> {
+    public List<Partido> ordenaPartidosPorMaiorVotoCandidato(List<Partido> partidos, int flag) {
+
+        List<Partido> partidosOrdenadosMaiorCand = new LinkedList<>(partidos);
+
+        Collections.sort(partidosOrdenadosMaiorCand, (p1, p2) -> {
             return p2.getMaiorQtdDeVotosDeUmCandidato() - p1.getMaiorQtdDeVotosDeUmCandidato();
         });
+
+        return partidosOrdenadosMaiorCand;
     }
         
 
-    public void ordenaPartidos(List<Partido> partidos, int flag) {
+    public List<Partido> ordenaPartidos(Map<Integer, Partido> partidos, int flag) {
        // Colocando os partidos em ordem decrescente de votos
-        Collections.sort(partidos, (p1, p2) -> {
-            if (p1.getQtdVotosTotal() == p2.getQtdVotosTotal()) {
-                // caso tenham o mesmo numero de votos, o com menor número partidário ganha
-                return p1.getNumero() - p2.getNumero();
-            } else {
-                return p2.getQtdVotosTotal() - p1.getQtdVotosTotal();
-            }
-        });     
+       List<Partido> partidosOrdenados = new LinkedList<>(partidos.values());
+       
+       Collections.sort(partidosOrdenados, (p1, p2) -> {
+           if (p1.getQtdVotosTotal() == p2.getQtdVotosTotal()) {
+               // caso tenham o mesmo numero de votos, o com menor número partidário ganha
+               return p1.getNumero() - p2.getNumero();
+           } else {
+               return p2.getQtdVotosTotal() - p1.getQtdVotosTotal();
+           }
+       });
+
+        return partidosOrdenados;
     }
 
-    public void ordenaCandidatos(List<Candidato> candidatos, int flag){
+    public List<Candidato> ordenaCandidatos(Map<Integer, Candidato> candidatos, int flag){
         // Colocando os candidatos em ordem
-        Collections.sort(candidatos, (c1, c2) -> {
+        List<Candidato> candidatosOrdenados = new LinkedList<>(candidatos.values());
+
+        Collections.sort(candidatosOrdenados, (c1, c2) -> {
             if (c1.getQtVotos() == c2.getQtVotos()) {
                 //caso tenham o mesmo numero de votos, o mais velho ganha
                 return c2.getDtNascimento().compareTo(c1.getDtNascimento());
@@ -53,11 +66,13 @@ public class Impressora {
 
         // Inserindo rankings na lista de candidatos
         int i = 1;
-        for (Candidato c : candidatos){
+        for (Candidato c : candidatosOrdenados){
             if (c.getCdCargo() != flag) continue;
             c.setPosRankingVotos(i);
             i++;
         }
+
+        return candidatosOrdenados;
     }
 
     public void imprimeCandidato(Candidato c, int i){
@@ -205,14 +220,15 @@ public class Impressora {
         Locale localeBR = new Locale("pt","BR");
         NumberFormat nf = NumberFormat.getNumberInstance(localeBR);
 
+        
         for (Partido p : partidos) {
-
+            
             /* Partidos que não possuírem candidatos com um número positivo de votos válidos devem ser ignorados */
             if (p.getQtdVotosNominais() == 0) continue;
-
-            this.ordenaCandidatos(p.getCandidatos(), flag);
-            Candidato candidatoMaisVotado = p.getCandidatoMaisVotado(flag);
-            Candidato candidatoMenosVotado = p.getCandidatoMenosVotado(flag);
+            
+            List<Candidato> candidatosOrdenados = this.ordenaCandidatos(p.getCandidatosMap(), flag);
+            Candidato candidatoMaisVotado = p.getCandidatoMaisVotado(candidatosOrdenados, flag);
+            Candidato candidatoMenosVotado = p.getCandidatoMenosVotado(candidatosOrdenados, flag);
 
             System.out.printf("%d - %s - %d, %s (%d, %s %s) / %s (%d, %s %s)\n",
                 i,

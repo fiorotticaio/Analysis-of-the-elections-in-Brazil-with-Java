@@ -39,6 +39,7 @@ public class Candidato {
     boolean apenasVotosDeLegenda;           // Caso esteja "Válido (legenda)" no campo NM_TIPO_DESTINACAO_VOTOS
     int cdDetalheSituacaoCand = 0;          // processar apenas os candidatos com 2 ou 16 (candidatura deferida)
     int nrPartidoCandidato = 0;             // Número do partido
+    
     String sgPartidoCandidato;              // Sigla do partido do candidato
     String nmUrnaCandidato;                 // Nome do candidato na urna
     int cdSitTotTurno = 0;                  // Situação do candidato (2 ou 3 - eleito)
@@ -53,7 +54,11 @@ public class Candidato {
     // o número do candidato no caso de voto nominal ou o número do partido se for voto na legenda
     // 95, 96, 97, 98 representam casos de votos em branco, nulos ou anulados, e devem ser ignorados
     int qtVotos = 0;
-
+    
+    public int getNrPartidoCandidato() {
+        return nrPartidoCandidato;
+    }
+    
     public boolean getApenasVotosDeLegenda() {
         return apenasVotosDeLegenda;
     }
