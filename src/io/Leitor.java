@@ -161,15 +161,17 @@ public class Leitor {
                         Partido partido = cand.getPartidoCandidato();
                         partido.setQtdVotosLegenda(partido.getQtdVotosLegenda() + Integer.parseInt(infoVotacao[21]));
                         
-                        partido.getCandidatosMap().remove(cand.getNrCandidato());
+                        partido.getCandidatosMap().remove(cand.getNrCandidato(), cand);
 
                     } else {
+                        
                         cand.setNrVotavel(Integer.parseInt(infoVotacao[19]));
                         cand.setQtVotos(cand.getQtVotos() + Integer.parseInt(infoVotacao[21]));
                         Partido partido = cand.getPartidoCandidato();
                         partido.setQtdVotosNominais(partido.getQtdVotosNominais() + Integer.parseInt(infoVotacao[21]));
     
                         existeCandidato = 1;
+                        
                     }
                 }
                 // for (Candidato candidato : candidatos) {

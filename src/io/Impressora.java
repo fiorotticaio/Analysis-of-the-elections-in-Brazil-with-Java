@@ -40,6 +40,7 @@ public class Impressora {
     public List<Partido> ordenaPartidos(Map<Integer, Partido> partidos, int flag) {
        // Colocando os partidos em ordem decrescente de votos
        List<Partido> partidosOrdenados = new LinkedList<>(partidos.values());
+       
        Collections.sort(partidosOrdenados, (p1, p2) -> {
            if (p1.getQtdVotosTotal() == p2.getQtdVotosTotal()) {
                // caso tenham o mesmo numero de votos, o com menor número partidário ganha
@@ -221,14 +222,15 @@ public class Impressora {
         Locale localeBR = new Locale("pt","BR");
         NumberFormat nf = NumberFormat.getNumberInstance(localeBR);
 
+        
         for (Partido p : partidos) {
-
+            
             /* Partidos que não possuírem candidatos com um número positivo de votos válidos devem ser ignorados */
             if (p.getQtdVotosNominais() == 0) continue;
-
-            this.ordenaCandidatos(p.getCandidatosMap(), flag);
-            Candidato candidatoMaisVotado = p.getCandidatoMaisVotado(flag);
-            Candidato candidatoMenosVotado = p.getCandidatoMenosVotado(flag);
+            
+            List<Candidato> candidatosOrdenados = this.ordenaCandidatos(p.getCandidatosMap(), flag);
+            Candidato candidatoMaisVotado = p.getCandidatoMaisVotado(candidatosOrdenados, flag);
+            Candidato candidatoMenosVotado = p.getCandidatoMenosVotado(candidatosOrdenados, flag);
 
             System.out.printf("%d - %s - %d, %s (%d, %s %s) / %s (%d, %s %s)\n",
                 i,

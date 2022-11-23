@@ -13,5 +13,10 @@ diff: compile
 run:
 	@ java -cp bin App
 
+build:
+	@ ant compile
+	@ ant jar
+	@ java -jar deputados.jar --federal consulta_cand_2022_ES.csv votacao_secao_2022_ES.csv 02/10/2022
+
 clear:
-	clear
+	@ clear

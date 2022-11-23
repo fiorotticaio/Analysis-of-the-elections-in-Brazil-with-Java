@@ -127,9 +127,9 @@ public class Partido implements Comparable<Partido> {
         this.qtdVotosTotal = this.qtdVotosLegenda + this.qtdVotosNominais;
     }
 
-    public Candidato getCandidatoMaisVotado(int flag) {
+    public Candidato getCandidatoMaisVotado(List<Candidato> candidatos, int flag) {
         Candidato maisVotado = null;
-        for (Candidato candidato : this.getCandidatos()) {
+        for (Candidato candidato : candidatos) {
 
             if (candidato.getCdCargo() != flag) continue;
 
@@ -142,9 +142,9 @@ public class Partido implements Comparable<Partido> {
         return maisVotado;
     }
 
-    public Candidato getCandidatoMenosVotado(int flag) {
+    public Candidato getCandidatoMenosVotado(List<Candidato> candidatos, int flag) {
         Candidato menosVotado = null;
-        for (Candidato candidato : this.getCandidatos()) {
+        for (Candidato candidato : candidatos) {
 
             if (candidato.getCdCargo() != flag) continue;
 
