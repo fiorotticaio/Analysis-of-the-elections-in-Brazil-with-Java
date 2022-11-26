@@ -13,13 +13,9 @@ import eleicao.Partido;
 
 public class Impressora {
 
-    public int numeroDeVagas = 0;
+    private int numeroDeVagas = 0;
 
-    public int getnumeroDeVagas() {
-        return this.numeroDeVagas;
-    }
-
-    public void setNumeroDeVagas(int numeroDeVagas) {
+    private void setNumeroDeVagas(int numeroDeVagas) {
         this.numeroDeVagas = numeroDeVagas;
     }
 

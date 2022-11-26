@@ -9,7 +9,6 @@ import java.util.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Map;
 
 import eleicao.Candidato;
@@ -194,22 +193,11 @@ public class Leitor {
 
     /*========== Funções auxiliares =========*/
 
-    public boolean partidoJaExiste(Map<Integer, Partido> partidos, int numeroPartido) {
-        // for (Partido partido : partidos) {
-        //     if (partido.getSigla().equals(sigla)) return true;
-        // }
-        // return false;
+    private boolean partidoJaExiste(Map<Integer, Partido> partidos, int numeroPartido) {
         if (partidos.containsKey(numeroPartido)) return true;
         else return false;
     }
     
-    public Partido getPartido(List<Partido> partidos, String sigla) {
-        for (Partido partido : partidos) {
-            if (partido.getSigla().equals(sigla)) return partido;
-        }
-        return null;
-    }
-
     public void adicionaCandidatosPartidos(Map<Integer, Candidato> candidatos, Map<Integer, Partido> partidos) {
         for (Candidato candidato : candidatos.values()) {
             Partido partido = partidos.get(candidato.getNrPartidoCandidato());
