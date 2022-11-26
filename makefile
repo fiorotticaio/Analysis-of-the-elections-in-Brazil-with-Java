@@ -18,5 +18,8 @@ build:
 	@ ant jar
 	@ java -jar deputados.jar --federal consulta_cand_2022_ES.csv votacao_secao_2022_ES.csv 02/10/2022
 
+compare:
+	java -jar deputados.jar --estadual ../../input_candidatos/consulta_cand_2022_${UF}.csv ../../input_votacoes/votacao_secao_2022_${UF}.csv 02/10/2022
+
 clear:
 	@ clear
