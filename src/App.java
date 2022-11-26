@@ -2,6 +2,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
@@ -12,13 +13,12 @@ import io.Impressora;
 import io.Leitor;
 
 public class App {
-    public static void main(String[] args) throws Exception {
-        
-        
+    public static void main(String[] args) {
         
         /*======== Recebendo dados da entrada padrão =========*/
         if (args.length < 4) {
-            throw new IOException("Use: java -jar deputados.jar <opção_de_cargo> <caminho_arquivo_candidatos> <caminho_arquivo_votacao> <data>");
+            System.out.println("Use: java -jar deputados.jar <opção_de_cargo> <caminho_arquivo_candidatos> <caminho_arquivo_votacao> <data>");
+            System.exit(1);
         } 
 
         int flag;
@@ -32,12 +32,20 @@ public class App {
         String dataDaEleicao = args[3];
 
         if (flag!=6 && flag!=7) {
-            throw new IOException("Código de deputado não reconhecido");
+            System.out.println("Código de deputado não reconhecido");
+            System.exit(1);
         }
 
         /*=========== Criando variáveis importantes (listas e tipo Date) ===========*/
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        Date dtEleicao = formatter.parse(dataDaEleicao);
+        Date dtEleicao = new Date();
+
+        try {
+            dtEleicao = formatter.parse(dataDaEleicao);
+        } catch (ParseException ex) {
+            System.out.println("Erro no formato de data fornecida: " + ex);
+            System.exit(1);
+        }
         
         Map<Integer, Candidato> candidatos = new HashMap<>(); // <NR_CANDIDATO, CANDIDATO>
         Map<Integer, Partido> partidos = new HashMap<>(); // <NR_PARTIDO, PARTIDO>
@@ -48,7 +56,6 @@ public class App {
         leitor.leArquivoCandidatos(caminhoArquivoCandidatos, candidatos, partidos, flag);
         leitor.adicionaCandidatosPartidos(candidatos, partidos);
         leitor.leArquivoVotacao(caminhoArquivoVotacao, candidatos, partidos, flag);        
-
         
         
         /*======== Processando os dados =========*/
@@ -57,6 +64,7 @@ public class App {
         Impressora impressora = new Impressora(); 
         List<Candidato> candidatosOrdenados = impressora.ordenaCandidatos(candidatos, flag);
         List<Partido> partidosOrdenados = impressora.ordenaPartidos(partidos, flag);
+        
         /* Debug */
         // impressora.imprimeCandidatos(candidatos);
         // System.out.println();

@@ -21,8 +21,7 @@ public class Leitor {
             String caminhoArquivo,
             Map<Integer, Candidato> candidatos,
             Map<Integer, Partido> partidos,
-            int flag)
-    throws Exception {
+            int flag) {
 
         int i = 0, j = 0;
         String linha = "";
@@ -100,8 +99,10 @@ public class Leitor {
 
         } catch (IOException ex) {
             System.out.println("Problemas com a cópia: " + ex);
+            System.exit(1);
         } catch (ParseException ex) {
-            System.out.println("Problemas ao converter o texto em objeto Date: " + ex);
+            System.out.println("Problemas na conversão de arquivos: " + ex);
+            System.exit(1);
         }
     }
 
@@ -111,8 +112,7 @@ public class Leitor {
         String caminhoArquivo,
         Map<Integer, Candidato> candidatos,
         Map<Integer, Partido> partidos,
-        int flag
-    ) throws Exception {
+        int flag)  {
 
         int i = 0, j = 0;
         String linha = "";
@@ -186,6 +186,7 @@ public class Leitor {
 
         } catch (IOException ex) {
             System.out.println("Problemas com a cópia: " + ex);
+            System.exit(1);
         }
     }
 
