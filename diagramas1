@@ -1,0 +1,32 @@
+@startuml
+
+class Candidato {
+    - String sgPartidoCandidato;              
+    - String nmUrnaCandidato;                 
+    - Date dtNascimento;                      
+    - int nrFederacaoPartidoCandidato = 0;    
+    - int cdDetalheSituacaoCand = 0;          
+    - int nrPartidoCandidato = 0;             
+    - int cdSitTotTurno = 0;                 
+    - int nrCandidato = 0;                    
+    - int cdGenero = 0;                       
+    - int nrVotavel = 0; 
+    - int qtVotos = 0;
+    - int cdCargo = 0;                      
+}
+
+class Partido {
+    - String sigla;
+    - String nome;
+    - int maiorQtdDeVotosDeUmCandidato = -1;
+    - int qtdCandidatosEleitos = 0;
+    - int nrFederacaoPartido = 0;
+    - int qtdVotosNominais = 0;
+    - int qtdVotosLegenda = 0;
+    - int qtdVotosTotal = 0;
+    - int numero = 0;
+}
+
+Candidato  "candidatos 0..*" <--> "partido 1" Partido 
+
+@enduml

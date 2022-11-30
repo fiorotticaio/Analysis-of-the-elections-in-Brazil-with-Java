@@ -17,3 +17,13 @@ Meanwhile, the compiled output files will be generated in the `bin` folder by de
 ## Dependency Management
 
 The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+
+## Makefile
+
+To compile and generate tests, use the following makefile directive:
+
+```
+make diff RELAT=<number>
+
+(with <number> beeing the report index that you want to test)
+```
