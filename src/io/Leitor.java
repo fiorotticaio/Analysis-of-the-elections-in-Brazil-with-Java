@@ -16,6 +16,14 @@ import eleicao.Partido;
 
 public class Leitor {
     
+    /**
+     * Lê o arquivo de candidatos
+     * <li> Preenchendo os campos iniciais do mapa de candidatos e partidos
+     * @param caminhoArquivo
+     * @param candidatos
+     * @param partidos
+     * @param flag
+     */
     public void leArquivoCandidatos(
             String caminhoArquivo,
             Map<Integer, Candidato> candidatos,
@@ -61,7 +69,6 @@ public class Leitor {
                         infoCandidato[29]
                     );
                     partidos.put(novoPartido.getNumero(), novoPartido);
-                    // partidos.add(novoPartido);
                 }
                 
                 /* checagem da candidatura definida ou se é voto de legenda direto */
@@ -74,7 +81,7 @@ public class Leitor {
                 DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                 Date dtNascimento = formatter.parse(infoCandidato[42]);
 
-
+                /* criando um novo candidato */
                 Candidato novoCandidato = new Candidato(
                     Integer.parseInt(infoCandidato[13]),
                     Integer.parseInt(infoCandidato[68]),
@@ -89,12 +96,11 @@ public class Leitor {
                     ehLegenda
                 );
                 
+                /* inserindo o candidato no mapa */
                 candidatos.put(Integer.parseInt(infoCandidato[16]), novoCandidato);
-                // candidatos.add(novoCandidato);
 
                 i++;
             }
-
 
         } catch (IOException ex) {
             System.out.println("Problemas com a cópia: " + ex);
@@ -105,8 +111,14 @@ public class Leitor {
         }
     }
 
-
-
+    /**
+     * Lê o arquivo de votos
+     * <li> Preenche os campos de votos do mapa de candidatos e partidos
+     * @param caminhoArquivo
+     * @param candidatos
+     * @param partidos
+     * @param flag
+     */
     public void leArquivoVotacao(
         String caminhoArquivo,
         Map<Integer, Candidato> candidatos,
@@ -153,7 +165,7 @@ public class Leitor {
                 
                 int existeCandidato = 0;
 
-                // buscando votos nominais analisando o código dos candidatos
+                /* buscando votos nominais analisando o código dos candidatos */
                 Candidato cand = candidatos.get(Integer.parseInt(infoVotacao[19]));
                 if (cand != null && cand.getCdCargo() == flag) {
                     if (cand.getApenasVotosDeLegenda()) {
@@ -163,18 +175,16 @@ public class Leitor {
                         partido.getCandidatosMap().remove(cand.getNrCandidato(), cand);
 
                     } else {
-                        
                         cand.setNrVotavel(Integer.parseInt(infoVotacao[19]));
                         cand.setQtVotos(cand.getQtVotos() + Integer.parseInt(infoVotacao[21]));
                         Partido partido = cand.getPartidoCandidato();
                         partido.setQtdVotosNominais(partido.getQtdVotosNominais() + Integer.parseInt(infoVotacao[21]));
     
                         existeCandidato = 1;
-                        
                     }
                 }
 
-                // buscando o código dos partidos para contabilizar os votos de legenda
+                /* buscando o código dos partidos para contabilizar os votos de legenda */
                 if (existeCandidato == 0) {
                     Partido part = partidos.get(Integer.parseInt(infoVotacao[19]));
                     if (part != null) {
@@ -190,14 +200,24 @@ public class Leitor {
     }
 
 
-
     /*========== Funções auxiliares =========*/
 
+    /**
+     * Confere se um partido já existe no mapa de partidos
+     * @param partidos
+     * @param numeroPartido
+     * @return true, caso o partido já exista no mapa de partidos, false caso contrário 
+     */
     private boolean partidoJaExiste(Map<Integer, Partido> partidos, int numeroPartido) {
         if (partidos.containsKey(numeroPartido)) return true;
         else return false;
     }
     
+    /**
+     * Adiciona um partido a seu candidato e os candidatos de um partido a ele
+     * @param candidatos
+     * @param partidos
+     */
     public void adicionaCandidatosPartidos(Map<Integer, Candidato> candidatos, Map<Integer, Partido> partidos) {
         for (Candidato candidato : candidatos.values()) {
             Partido partido = partidos.get(candidato.getNrPartidoCandidato());
@@ -206,6 +226,3 @@ public class Leitor {
         }
     }
 }
-
-
-

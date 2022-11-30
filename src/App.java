@@ -35,7 +35,7 @@ public class App {
             System.exit(1);
         }
 
-        /*=========== Criando variáveis importantes (listas e tipo Date) ===========*/
+        /*=========== Criando variáveis importantes (maps e tipo Date) ===========*/
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date dtEleicao = new Date();
 
@@ -64,13 +64,6 @@ public class App {
         List<Candidato> candidatosOrdenados = impressora.ordenaCandidatos(candidatos, flag);
         List<Partido> partidosOrdenados = impressora.ordenaPartidos(partidos, flag);
         
-        /* Debug */
-        // impressora.imprimeCandidatos(candidatos);
-        // System.out.println();
-        // impressora.imprimePartidos(partidos);
-        // System.out.println();
-
-
 
         /*======== Imprimindo relatórios ========*/
 

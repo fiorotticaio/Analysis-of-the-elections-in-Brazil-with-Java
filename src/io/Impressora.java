@@ -19,6 +19,13 @@ public class Impressora {
         this.numeroDeVagas = numeroDeVagas;
     }
 
+    /**
+     * Ordena de forma decrescente os partidos
+     * com base na quantidade de votos do candidato mais votado 
+     * @param partidos
+     * @param flag
+     * @return Uma lista com os partidos ordenados
+     */
     public List<Partido> ordenaPartidosPorMaiorVotoCandidato(List<Partido> partidos, int flag) {
 
         List<Partido> partidosOrdenadosMaiorCand = new LinkedList<>(partidos);
@@ -29,10 +36,14 @@ public class Impressora {
 
         return partidosOrdenadosMaiorCand;
     }
-        
-
+    
+    /**
+     * Coloca os partidos em ordem decrescente de votos 
+     * @param partidos
+     * @param flag
+     * @return Uma lista com os partidos ordenados
+     */
     public List<Partido> ordenaPartidos(Map<Integer, Partido> partidos, int flag) {
-       // Colocando os partidos em ordem decrescente de votos
        List<Partido> partidosOrdenados = new LinkedList<>(partidos.values());
        
        Collections.sort(partidosOrdenados, (p1, p2) -> {
@@ -47,13 +58,18 @@ public class Impressora {
         return partidosOrdenados;
     }
 
+    /**
+     * Coloca os candidatos em ordem decrescente de votos
+     * @param candidatos
+     * @param flag
+     * @return Lista dos candidatos ordenados
+     */
     public List<Candidato> ordenaCandidatos(Map<Integer, Candidato> candidatos, int flag){
-        // Colocando os candidatos em ordem
         List<Candidato> candidatosOrdenados = new LinkedList<>(candidatos.values());
 
         Collections.sort(candidatosOrdenados, (c1, c2) -> {
             if (c1.getQtVotos() == c2.getQtVotos()) {
-                //caso tenham o mesmo numero de votos, o mais velho ganha
+                /* caso tenham o mesmo numero de votos, o mais velho ganha */
                 return c2.getDtNascimento().compareTo(c1.getDtNascimento());
             } else {
                 return c2.getQtVotos() - c1.getQtVotos();
@@ -71,6 +87,11 @@ public class Impressora {
         return candidatosOrdenados;
     }
 
+    /**
+     * Imprime alguns dados do candidato para os relatórios
+     * @param candidato
+     * @param inteiro
+     */
     public void imprimeCandidato(Candidato c, int i){
         // O argumento "i" faz referencia a qual indice será colocado antes do nome do candidato.
         //   -> Para i=-1 será colocado a posição do candidato no ranking de votos
@@ -107,7 +128,6 @@ public class Impressora {
         }
     }
 
-    
     public void imprimeRelatorio1(List<Candidato> candidatos, int flag) {
         int vagas = 0;
         for (Candidato cand : candidatos) {
@@ -118,7 +138,6 @@ public class Impressora {
         this.setNumeroDeVagas(vagas);
         System.out.println("Número de vagas: " + vagas);
     }
-
 
     public void imprimeRelatorio2(List<Candidato> candidatos, int flag) {
         System.out.printf("Deputados %s eleitos:\n", flag==7?"estaduais":"federais");
@@ -208,7 +227,6 @@ public class Impressora {
         }
     }
 
-
     public void imprimeRelatorio8(List<Partido> partidos, int flag) {
         System.out.printf("Primeiro e último colocados de cada partido:\n");
         int i = 1;
@@ -245,7 +263,6 @@ public class Impressora {
             i++;
         }
     }
-
 
     public void imprimeRelatorio9(List<Candidato> candidatos, int flag, Date dtEleicao) {
         System.out.printf("Eleitos, por faixa etária (na data da eleição):\n");

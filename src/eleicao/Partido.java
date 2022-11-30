@@ -83,6 +83,12 @@ public class Partido {
         this.candidatos.put(candidato.getNrCandidato(), candidato);
     }
 
+    /**
+     * Calcula a quantidade candidatos eleitos,
+     * a quantidade de votos totais e o maior número de votos de um candidato
+     * em um partido
+     * @param flag
+     */
     public void calculaQuantidadeDeVotos(int flag) {
 
         int maiorQtdDeVotosDeUmCandidato = -1;
@@ -107,6 +113,12 @@ public class Partido {
         this.qtdVotosTotal = this.qtdVotosLegenda + this.qtdVotosNominais;
     }
 
+    /**
+     * Descobre o candidato mais votado de um partido
+     * @param candidatos
+     * @param flag
+     * @return Candidato mais votado do partido
+     */
     public Candidato getCandidatoMaisVotado(List<Candidato> candidatos, int flag) {
         Candidato maisVotado = null;
         for (Candidato candidato : candidatos) {
@@ -122,6 +134,12 @@ public class Partido {
         return maisVotado;
     }
 
+    /**
+     * Descobre o candidato menos votado de um partido
+     * @param candidatos
+     * @param flag
+     * @return Candidato menos votado do partido
+     */
     public Candidato getCandidatoMenosVotado(List<Candidato> candidatos, int flag) {
         Candidato menosVotado = null;
         for (Candidato candidato : candidatos) {
@@ -137,6 +155,7 @@ public class Partido {
         return menosVotado;
     }
 
+    /* Debug */
     public void imprimeCandidatos() {
         for (Candidato candidato : this.getCandidatos()) {
             System.out.println(candidato.getNrVotavel() + " - " + candidato.getNmUrnaCandidato() + " - " + candidato.getQtVotos());

@@ -131,6 +131,12 @@ public class Candidato {
         return this.cdCargo;
     }
 
+    /**
+     * Calcula a idade do candidato em anos 
+     * considerando a data atual como a data de eleição
+     * @param dtEleicao
+     * @return Idade do candidato
+     */
     public int calculaIdade(Date dtEleicao) {
         Calendar calendarioDataEleicao = Calendar.getInstance();
         calendarioDataEleicao.setTime(dtEleicao);
