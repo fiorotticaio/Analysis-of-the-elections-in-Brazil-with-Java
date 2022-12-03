@@ -102,6 +102,8 @@ public class Leitor {
                 i++;
             }
 
+            br.close();
+
         } catch (IOException ex) {
             System.out.println("Problemas com a cópia: " + ex);
             System.exit(1);
@@ -192,6 +194,8 @@ public class Leitor {
                     }
                 }
             }
+
+            br.close();
 
         } catch (IOException ex) {
             System.out.println("Problemas com a cópia: " + ex);
